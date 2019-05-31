@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: anblog
-  description: 'Its a *very* simple blog API. Code is [here](https://github.com/ankeesler/anblog).'
+  description: It's a *very* simple blog API. Code is [here](https://github.com/ankeesler/anblog).
   version: 1.0.0
 servers:
 - url: https://localhost:9090

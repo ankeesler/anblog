@@ -1,6 +1,6 @@
 # anblog
 
-Its a *very* simple blog API.
+It's a *very* simple blog API.
 
 OpenAPI spec: [anblog.yml](anblog.yml)
 Client CLI: [client](client)

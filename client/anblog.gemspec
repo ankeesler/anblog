@@ -3,7 +3,7 @@
 =begin
 #anblog
 
-#Its a *very* simple blog API. Code is [here](https://github.com/ankeesler/anblog).
+#It's a *very* simple blog API. Code is [here](https://github.com/ankeesler/anblog).
 
 The version of the OpenAPI document: 1.0.0
 

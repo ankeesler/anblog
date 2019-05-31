@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: ANBLOG
+  title: anblog
   description: 'Its a *very* simple blog API. Code is [here](https://github.com/ankeesler/anblog).'
   version: 1.0.0
 servers:
@@ -10,9 +10,27 @@ tags:
   description: A blog post
 paths:
   /posts:
-    post:
+    get:
       tags:
       - post
+      summary: Get all posts
+      operationId: getAllPosts
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+      security:
+      - petstore_auth:
+        - write:posts
+        - read:posts
+    post:
+      tags:
+        - post
       summary: Add a new post
       operationId: addPost
       requestBody:
@@ -23,13 +41,19 @@ paths:
               $ref: '#/components/schemas/Post'
         required: true
       responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
         405:
           description: Invalid input
           content: {}
       security:
-      - petstore_auth:
-        - write:posts
-        - read:posts
+        - petstore_auth:
+            - write:posts
+            - read:posts
   /posts/{postId}:
     get:
       tags:
@@ -52,9 +76,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Post'
-        400:
-          description: Invalid ID supplied
-          content: {}
         404:
           description: Post not found
           content: {}
@@ -83,6 +104,12 @@ paths:
           type: integer
           format: int64
       responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
         400:
           description: Invalid ID supplied
           content: {}
@@ -110,6 +137,12 @@ paths:
           type: integer
           format: int64
       responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
         400:
           description: Invalid ID supplied
           content: {}
@@ -132,6 +165,12 @@ components:
           type: string
         content:
           type: string
+        created:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
         parent:
           $ref: '#/components/schemas/Post'
         children:

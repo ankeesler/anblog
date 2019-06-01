@@ -59,15 +59,6 @@ dependencies {
 // Define the main class for the application
 mainClassName = 'com.marshmallow.anblog.OpenAPI2SpringBoot'
 
-openApiGenerate {
-    generatorName = 'spring'
-    inputSpec = 'anblog.yml'
-    configOptions = [
-            basePackage: 'com.marshmallow.anblog',
-            delegatePattern: true
-    ]
-}
-
 task buildJavaServer(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask){
     generatorName = "spring"
     inputSpec = "anblog.yml"

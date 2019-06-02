@@ -52,6 +52,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'mysql:mysql-connector-java'
 
+    implementation 'org.springframework.boot:spring-boot-starter-cloud-connectors'
+
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
@@ -95,3 +97,7 @@ sourceSets.main.java.srcDir buildJavaServer.outputDir.get() + "/src/main/java"
 sourceSets.main.resources.srcDir buildJavaServer.outputDir.get() + "/src/main/resources"
 
 bootRun { systemProperties = System.properties }
+
+task cfPush(type: Exec, dependsOn: bootJar) {
+    commandLine 'cf', 'push'
+}

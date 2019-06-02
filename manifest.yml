@@ -1,0 +1,12 @@
+---
+applications:
+  - name: anblog
+    env:
+      SPRING_PROFILES_ACTIVE: cloud
+    services:
+      - anblog-mysql-service
+    buildpacks:
+      - java_buildpack
+    path: build/libs/anblog-1.0.0-RELEASE.jar
+    routes:
+      - route: anblog.cfapps.io

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.NativeWebRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +33,10 @@ public class PostsService implements PostsApiDelegate {
   }
 
   @Override
-  public ResponseEntity<Post> deletePost(final Long postId) {
-    final Optional<PostEntity> entity = postRepository.findById(postId);
+  public ResponseEntity<Post> deletePost(final String path) {
+    final Optional<PostEntity> entity = postRepository.findById(path);
     if (entity.isPresent()) {
-      postRepository.deleteById(postId);
+      postRepository.deleteById(path);
       return new ResponseEntity<>(entityToPost(entity.get()), HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -45,8 +44,8 @@ public class PostsService implements PostsApiDelegate {
   }
 
   @Override
-  public ResponseEntity<Post> getPostById(Long postId) {
-    final Optional<PostEntity> entity = postRepository.findById(postId);
+  public ResponseEntity<Post> getPostByPath(final String path) {
+    final Optional<PostEntity> entity = postRepository.findById(path);
     if (entity.isPresent()) {
       return new ResponseEntity<>(entityToPost(entity.get()), HttpStatus.OK);
     } else {
@@ -55,8 +54,8 @@ public class PostsService implements PostsApiDelegate {
   }
 
   @Override
-  public ResponseEntity<Post> updatePost(Long postId, Post post) {
-    final Optional<PostEntity> entity = postRepository.findById(postId);
+  public ResponseEntity<Post> updatePost(final String path, final Post post) {
+    final Optional<PostEntity> entity = postRepository.findById(path);
     if (entity.isPresent()) {
       postRepository.save(entity.get());
       return new ResponseEntity<>(entityToPost(entity.get()), HttpStatus.OK);
@@ -66,19 +65,16 @@ public class PostsService implements PostsApiDelegate {
   }
 
   private static Post entityToPost(final PostEntity entity) {
-    final Post post = new Post()
-            .id(entity.getId())
-            .title(entity.getTitle())
+    return new Post()
+            .path(entity.getPath())
             .content(entity.getContent())
             .created(entity.getCreated())
             .modified(entity.getModified());
-    return post;
   }
 
   private static PostEntity postToEntity(final Post post) {
     final PostEntity entity = new PostEntity();
-    entity.setId(post.getId());
-    entity.setTitle(post.getTitle());
+    entity.setPath(post.getPath());
     entity.setContent(post.getContent());
     entity.setCreated(post.getCreated());
     entity.setModified(post.getModified());

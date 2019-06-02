@@ -5,10 +5,10 @@ All URIs are relative to *https://localhost:9090*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**add_post**](PostApi.md#add_post) | **POST** /posts | Add a new post
-[**delete_post**](PostApi.md#delete_post) | **DELETE** /posts/{postId} | Deletes a post
+[**delete_post**](PostApi.md#delete_post) | **DELETE** /posts/{postPath} | Deletes a post
 [**get_all_posts**](PostApi.md#get_all_posts) | **GET** /posts | Get all posts
-[**get_post_by_id**](PostApi.md#get_post_by_id) | **GET** /posts/{postId} | Get post by ID
-[**update_post**](PostApi.md#update_post) | **PUT** /posts/{postId} | Update an existing post
+[**get_post_by_path**](PostApi.md#get_post_by_path) | **GET** /posts/{postPath} | Get post by path
+[**update_post**](PostApi.md#update_post) | **PUT** /posts/{postPath} | Update an existing post
 
 
 
@@ -59,7 +59,7 @@ No authorization required
 
 ## delete_post
 
-> Post delete_post(post_id)
+> Post delete_post(post_path)
 
 Deletes a post
 
@@ -70,11 +70,11 @@ Deletes a post
 require 'anblog'
 
 api_instance = Anblog::PostApi.new
-post_id = 56 # Integer | Post id to delete
+post_path = 'post_path_example' # String | The path of the post to delete
 
 begin
   #Deletes a post
-  result = api_instance.delete_post(post_id)
+  result = api_instance.delete_post(post_path)
   p result
 rescue Anblog::ApiError => e
   puts "Exception when calling PostApi->delete_post: #{e}"
@@ -86,7 +86,7 @@ end
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **post_id** | **Integer**| Post id to delete | 
+ **post_path** | **String**| The path of the post to delete | 
 
 ### Return type
 
@@ -143,11 +143,11 @@ No authorization required
 - **Accept**: application/json
 
 
-## get_post_by_id
+## get_post_by_path
 
-> Post get_post_by_id(post_id)
+> Post get_post_by_path(post_path)
 
-Get post by ID
+Get post by path
 
 Returns a single post
 
@@ -158,14 +158,14 @@ Returns a single post
 require 'anblog'
 
 api_instance = Anblog::PostApi.new
-post_id = 56 # Integer | ID of post to return
+post_path = 'post_path_example' # String | The path of the post to return
 
 begin
-  #Get post by ID
-  result = api_instance.get_post_by_id(post_id)
+  #Get post by path
+  result = api_instance.get_post_by_path(post_path)
   p result
 rescue Anblog::ApiError => e
-  puts "Exception when calling PostApi->get_post_by_id: #{e}"
+  puts "Exception when calling PostApi->get_post_by_path: #{e}"
 end
 ```
 
@@ -174,7 +174,7 @@ end
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **post_id** | **Integer**| ID of post to return | 
+ **post_path** | **String**| The path of the post to return | 
 
 ### Return type
 
@@ -192,7 +192,7 @@ No authorization required
 
 ## update_post
 
-> Post update_post(post_id, post)
+> Post update_post(post_path, post)
 
 Update an existing post
 
@@ -208,12 +208,12 @@ Anblog.configure do |config|
 end
 
 api_instance = Anblog::PostApi.new
-post_id = 56 # Integer | ID of post to return
+post_path = 'post_path_example' # String | The path of the post to return
 post = Anblog::Post.new # Post | Post object to update
 
 begin
   #Update an existing post
-  result = api_instance.update_post(post_id, post)
+  result = api_instance.update_post(post_path, post)
   p result
 rescue Anblog::ApiError => e
   puts "Exception when calling PostApi->update_post: #{e}"
@@ -225,7 +225,7 @@ end
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **post_id** | **Integer**| ID of post to return | 
+ **post_path** | **String**| The path of the post to return | 
  **post** | [**Post**](Post.md)| Post object to update | 
 
 ### Return type

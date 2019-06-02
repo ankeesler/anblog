@@ -14,9 +14,7 @@ require 'date'
 
 module Anblog
   class Post
-    attr_accessor :id
-
-    attr_accessor :title
+    attr_accessor :path
 
     attr_accessor :content
 
@@ -24,33 +22,23 @@ module Anblog
 
     attr_accessor :modified
 
-    attr_accessor :parent
-
-    attr_accessor :children
-
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'id' => :'id',
-        :'title' => :'title',
+        :'path' => :'path',
         :'content' => :'content',
         :'created' => :'created',
-        :'modified' => :'modified',
-        :'parent' => :'parent',
-        :'children' => :'children'
+        :'modified' => :'modified'
       }
     end
 
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'id' => :'Integer',
-        :'title' => :'String',
+        :'path' => :'String',
         :'content' => :'String',
         :'created' => :'DateTime',
-        :'modified' => :'DateTime',
-        :'parent' => :'Post',
-        :'children' => :'Array<Post>'
+        :'modified' => :'DateTime'
       }
     end
 
@@ -69,12 +57,8 @@ module Anblog
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'id')
-        self.id = attributes[:'id']
-      end
-
-      if attributes.key?(:'title')
-        self.title = attributes[:'title']
+      if attributes.key?(:'path')
+        self.path = attributes[:'path']
       end
 
       if attributes.key?(:'content')
@@ -88,29 +72,45 @@ module Anblog
       if attributes.key?(:'modified')
         self.modified = attributes[:'modified']
       end
-
-      if attributes.key?(:'parent')
-        self.parent = attributes[:'parent']
-      end
-
-      if attributes.key?(:'children')
-        if (value = attributes[:'children']).is_a?(Array)
-          self.children = value
-        end
-      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
+      if !@path.nil? && @path.to_s.length > 100
+        invalid_properties.push('invalid value for "path", the character length must be smaller than or equal to 100.')
+      end
+
+      pattern = Regexp.new(/^(\.[a-z0-9]+)+$/)
+      if !@path.nil? && @path !~ pattern
+        invalid_properties.push("invalid value for \"path\", must conform to the pattern #{pattern}.")
+      end
+
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
+      return false if !@path.nil? && @path.to_s.length > 100
+      return false if !@path.nil? && @path !~ Regexp.new(/^(\.[a-z0-9]+)+$/)
       true
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] path Value to be assigned
+    def path=(path)
+      if !path.nil? && path.to_s.length > 100
+        fail ArgumentError, 'invalid value for "path", the character length must be smaller than or equal to 100.'
+      end
+
+      pattern = Regexp.new(/^(\.[a-z0-9]+)+$/)
+      if !path.nil? && path !~ pattern
+        fail ArgumentError, "invalid value for \"path\", must conform to the pattern #{pattern}."
+      end
+
+      @path = path
     end
 
     # Checks equality by comparing each attribute.
@@ -118,13 +118,10 @@ module Anblog
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          id == o.id &&
-          title == o.title &&
+          path == o.path &&
           content == o.content &&
           created == o.created &&
-          modified == o.modified &&
-          parent == o.parent &&
-          children == o.children
+          modified == o.modified
     end
 
     # @see the `==` method
@@ -136,7 +133,7 @@ module Anblog
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title, content, created, modified, parent, children].hash
+      [path, content, created, modified].hash
     end
 
     # Builds the object from hash

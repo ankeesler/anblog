@@ -26,7 +26,6 @@ paths:
                   $ref: '#/components/schemas/Post'
       security:
       - petstore_auth:
-        - write:posts
         - read:posts
     post:
       tags:
@@ -54,21 +53,20 @@ paths:
         - petstore_auth:
             - write:posts
             - read:posts
-  /posts/{postId}:
+  /posts/{postPath}:
     get:
       tags:
       - post
-      summary: Get post by ID
+      summary: Get post by path
       description: Returns a single post
-      operationId: getPostById
+      operationId: getPostByPath
       parameters:
-      - name: postId
+      - name: postPath
         in: path
-        description: ID of post to return
+        description: The path of the post to return
         required: true
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         200:
           description: successful operation
@@ -81,7 +79,6 @@ paths:
           content: {}
       security:
       - petstore_auth:
-        - write:posts
         - read:posts
     put:
       tags:
@@ -96,13 +93,12 @@ paths:
               $ref: '#/components/schemas/Post'
         required: true
       parameters:
-      - name: postId
+      - name: postPath
         in: path
-        description: ID of post to return
+        description: The path of the post to return
         required: true
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         200:
           description: successful operation
@@ -111,7 +107,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Post'
         400:
-          description: Invalid ID supplied
+          description: Invalid path supplied
           content: {}
         404:
           description: Post not found
@@ -129,13 +125,12 @@ paths:
       summary: Deletes a post
       operationId: deletePost
       parameters:
-      - name: postId
+      - name: postPath
         in: path
-        description: Post id to delete
+        description: The path of the post to delete
         required: true
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         200:
           description: successful operation
@@ -144,7 +139,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Post'
         400:
-          description: Invalid ID supplied
+          description: Invalid path supplied
           content: {}
         404:
           description: Post not found
@@ -158,11 +153,10 @@ components:
     Post:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-        title:
+        path:
           type: string
+          maxLength: 100
+          pattern: '^(\.[a-z0-9]+)+$'
         content:
           type: string
         created:
@@ -171,12 +165,6 @@ components:
         modified:
           type: string
           format: date-time
-        parent:
-          $ref: '#/components/schemas/Post'
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/Post'
   securitySchemes:
     blog_auth:
       type: oauth2

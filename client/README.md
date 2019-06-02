@@ -74,10 +74,10 @@ All URIs are relative to *https://localhost:9090*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *Anblog::PostApi* | [**add_post**](docs/PostApi.md#add_post) | **POST** /posts | Add a new post
-*Anblog::PostApi* | [**delete_post**](docs/PostApi.md#delete_post) | **DELETE** /posts/{postId} | Deletes a post
+*Anblog::PostApi* | [**delete_post**](docs/PostApi.md#delete_post) | **DELETE** /posts/{postPath} | Deletes a post
 *Anblog::PostApi* | [**get_all_posts**](docs/PostApi.md#get_all_posts) | **GET** /posts | Get all posts
-*Anblog::PostApi* | [**get_post_by_id**](docs/PostApi.md#get_post_by_id) | **GET** /posts/{postId} | Get post by ID
-*Anblog::PostApi* | [**update_post**](docs/PostApi.md#update_post) | **PUT** /posts/{postId} | Update an existing post
+*Anblog::PostApi* | [**get_post_by_path**](docs/PostApi.md#get_post_by_path) | **GET** /posts/{postPath} | Get post by path
+*Anblog::PostApi* | [**update_post**](docs/PostApi.md#update_post) | **PUT** /posts/{postPath} | Update an existing post
 
 
 ## Documentation for Models

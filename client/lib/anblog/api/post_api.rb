@@ -82,28 +82,28 @@ module Anblog
     end
 
     # Deletes a post
-    # @param post_id [Integer] Post id to delete
+    # @param post_path [String] The path of the post to delete
     # @param [Hash] opts the optional parameters
     # @return [Post]
-    def delete_post(post_id, opts = {})
-      data, _status_code, _headers = delete_post_with_http_info(post_id, opts)
+    def delete_post(post_path, opts = {})
+      data, _status_code, _headers = delete_post_with_http_info(post_path, opts)
       data
     end
 
     # Deletes a post
-    # @param post_id [Integer] Post id to delete
+    # @param post_path [String] The path of the post to delete
     # @param [Hash] opts the optional parameters
     # @return [Array<(Post, Integer, Hash)>] Post data, response status code and response headers
-    def delete_post_with_http_info(post_id, opts = {})
+    def delete_post_with_http_info(post_path, opts = {})
       if @api_client.config.debugging
         @api_client.config.logger.debug 'Calling API: PostApi.delete_post ...'
       end
-      # verify the required parameter 'post_id' is set
-      if @api_client.config.client_side_validation && post_id.nil?
-        fail ArgumentError, "Missing the required parameter 'post_id' when calling PostApi.delete_post"
+      # verify the required parameter 'post_path' is set
+      if @api_client.config.client_side_validation && post_path.nil?
+        fail ArgumentError, "Missing the required parameter 'post_path' when calling PostApi.delete_post"
       end
       # resource path
-      local_var_path = '/posts/{postId}'.sub('{' + 'postId' + '}', post_id.to_s)
+      local_var_path = '/posts/{postPath}'.sub('{' + 'postPath' + '}', post_path.to_s)
 
       # query parameters
       query_params = opts[:query_params] || {}
@@ -195,31 +195,31 @@ module Anblog
       return data, status_code, headers
     end
 
-    # Get post by ID
+    # Get post by path
     # Returns a single post
-    # @param post_id [Integer] ID of post to return
+    # @param post_path [String] The path of the post to return
     # @param [Hash] opts the optional parameters
     # @return [Post]
-    def get_post_by_id(post_id, opts = {})
-      data, _status_code, _headers = get_post_by_id_with_http_info(post_id, opts)
+    def get_post_by_path(post_path, opts = {})
+      data, _status_code, _headers = get_post_by_path_with_http_info(post_path, opts)
       data
     end
 
-    # Get post by ID
+    # Get post by path
     # Returns a single post
-    # @param post_id [Integer] ID of post to return
+    # @param post_path [String] The path of the post to return
     # @param [Hash] opts the optional parameters
     # @return [Array<(Post, Integer, Hash)>] Post data, response status code and response headers
-    def get_post_by_id_with_http_info(post_id, opts = {})
+    def get_post_by_path_with_http_info(post_path, opts = {})
       if @api_client.config.debugging
-        @api_client.config.logger.debug 'Calling API: PostApi.get_post_by_id ...'
+        @api_client.config.logger.debug 'Calling API: PostApi.get_post_by_path ...'
       end
-      # verify the required parameter 'post_id' is set
-      if @api_client.config.client_side_validation && post_id.nil?
-        fail ArgumentError, "Missing the required parameter 'post_id' when calling PostApi.get_post_by_id"
+      # verify the required parameter 'post_path' is set
+      if @api_client.config.client_side_validation && post_path.nil?
+        fail ArgumentError, "Missing the required parameter 'post_path' when calling PostApi.get_post_by_path"
       end
       # resource path
-      local_var_path = '/posts/{postId}'.sub('{' + 'postId' + '}', post_id.to_s)
+      local_var_path = '/posts/{postPath}'.sub('{' + 'postPath' + '}', post_path.to_s)
 
       # query parameters
       query_params = opts[:query_params] || {}
@@ -252,40 +252,40 @@ module Anblog
 
       data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
       if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: PostApi#get_post_by_id\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+        @api_client.config.logger.debug "API called: PostApi#get_post_by_path\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end
 
     # Update an existing post
-    # @param post_id [Integer] ID of post to return
+    # @param post_path [String] The path of the post to return
     # @param post [Post] Post object to update
     # @param [Hash] opts the optional parameters
     # @return [Post]
-    def update_post(post_id, post, opts = {})
-      data, _status_code, _headers = update_post_with_http_info(post_id, post, opts)
+    def update_post(post_path, post, opts = {})
+      data, _status_code, _headers = update_post_with_http_info(post_path, post, opts)
       data
     end
 
     # Update an existing post
-    # @param post_id [Integer] ID of post to return
+    # @param post_path [String] The path of the post to return
     # @param post [Post] Post object to update
     # @param [Hash] opts the optional parameters
     # @return [Array<(Post, Integer, Hash)>] Post data, response status code and response headers
-    def update_post_with_http_info(post_id, post, opts = {})
+    def update_post_with_http_info(post_path, post, opts = {})
       if @api_client.config.debugging
         @api_client.config.logger.debug 'Calling API: PostApi.update_post ...'
       end
-      # verify the required parameter 'post_id' is set
-      if @api_client.config.client_side_validation && post_id.nil?
-        fail ArgumentError, "Missing the required parameter 'post_id' when calling PostApi.update_post"
+      # verify the required parameter 'post_path' is set
+      if @api_client.config.client_side_validation && post_path.nil?
+        fail ArgumentError, "Missing the required parameter 'post_path' when calling PostApi.update_post"
       end
       # verify the required parameter 'post' is set
       if @api_client.config.client_side_validation && post.nil?
         fail ArgumentError, "Missing the required parameter 'post' when calling PostApi.update_post"
       end
       # resource path
-      local_var_path = '/posts/{postId}'.sub('{' + 'postId' + '}', post_id.to_s)
+      local_var_path = '/posts/{postPath}'.sub('{' + 'postPath' + '}', post_path.to_s)
 
       # query parameters
       query_params = opts[:query_params] || {}

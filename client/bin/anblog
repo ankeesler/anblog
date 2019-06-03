@@ -15,7 +15,12 @@ logger.formatter = proc do |severity, datetime, progname, msg|
   "anblog | #{severity} | #{msg}\n"
 end
 
-post_api_client = Anblog::PostApi.new
+configuration = Anblog::Configuration.new do |c|
+  c.debugging = true
+  c.logger = logger
+end
+api_client = Anblog::ApiClient.new configuration
+post_api_client = Anblog::PostApi.new api_client
 editor = Anblog::Editor.new ENV['EDITOR']
 timer = Anblog::Timer.new
 tmp_path = Dir.tmpdir

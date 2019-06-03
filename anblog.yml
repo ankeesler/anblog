@@ -28,7 +28,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/Post'
       security:
-      - petstore_auth:
+      - blog_auth:
+        - write:posts
         - read:posts
     post:
       tags:
@@ -53,9 +54,9 @@ paths:
           description: Invalid input
           content: {}
       security:
-        - petstore_auth:
-            - write:posts
-            - read:posts
+      - blog_auth:
+        - write:posts
+        - read:posts
   /posts/{postPath}:
     get:
       tags:
@@ -81,7 +82,8 @@ paths:
           description: Post not found
           content: {}
       security:
-      - petstore_auth:
+      - blog_auth:
+        - write:posts
         - read:posts
     put:
       tags:
@@ -148,9 +150,9 @@ paths:
           description: Post not found
           content: {}
       security:
-      - blob_auth:
-        - write:pets
-        - read:pets
+      - blog_auth:
+        - write:posts
+        - read:posts
 components:
   schemas:
     Post:
@@ -173,7 +175,7 @@ components:
       type: oauth2
       flows:
         implicit:
-          authorizationUrl: http://petstore.swagger.io/oauth/dialog
+          authorizationUrl: https://google.com/oauth/authorize
           scopes:
             write:posts: modify posts in your account
             read:posts: read posts in your account

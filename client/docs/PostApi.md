@@ -23,6 +23,11 @@ Add a new post
 ```ruby
 # load the gem
 require 'anblog'
+# setup authorization
+Anblog.configure do |config|
+  # Configure OAuth2 access token for authorization: blog_auth
+  config.access_token = 'YOUR ACCESS TOKEN'
+end
 
 api_instance = Anblog::PostApi.new
 post = Anblog::Post.new # Post | Post object to add
@@ -49,7 +54,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[blog_auth](../README.md#blog_auth)
 
 ### HTTP request headers
 
@@ -68,6 +73,11 @@ Deletes a post
 ```ruby
 # load the gem
 require 'anblog'
+# setup authorization
+Anblog.configure do |config|
+  # Configure OAuth2 access token for authorization: blog_auth
+  config.access_token = 'YOUR ACCESS TOKEN'
+end
 
 api_instance = Anblog::PostApi.new
 post_path = 'post_path_example' # String | The path of the post to delete
@@ -94,7 +104,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[blog_auth](../README.md#blog_auth)
 
 ### HTTP request headers
 
@@ -113,6 +123,11 @@ Get all posts
 ```ruby
 # load the gem
 require 'anblog'
+# setup authorization
+Anblog.configure do |config|
+  # Configure OAuth2 access token for authorization: blog_auth
+  config.access_token = 'YOUR ACCESS TOKEN'
+end
 
 api_instance = Anblog::PostApi.new
 
@@ -135,7 +150,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[blog_auth](../README.md#blog_auth)
 
 ### HTTP request headers
 
@@ -156,6 +171,11 @@ Returns a single post
 ```ruby
 # load the gem
 require 'anblog'
+# setup authorization
+Anblog.configure do |config|
+  # Configure OAuth2 access token for authorization: blog_auth
+  config.access_token = 'YOUR ACCESS TOKEN'
+end
 
 api_instance = Anblog::PostApi.new
 post_path = 'post_path_example' # String | The path of the post to return
@@ -182,7 +202,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[blog_auth](../README.md#blog_auth)
 
 ### HTTP request headers
 

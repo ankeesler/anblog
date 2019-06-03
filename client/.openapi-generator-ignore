@@ -28,5 +28,5 @@ git_push.sh
 Gemfile
 Gemfile.lock
 anblog.gemspec
-anblog.rb
-spec_helper.rb
+lib/anblog.rb
+spec/spec_helper.rb

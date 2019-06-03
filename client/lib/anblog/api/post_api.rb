@@ -63,7 +63,7 @@ module Anblog
       return_type = opts[:return_type] || 'Post' 
 
       # auth_names
-      auth_names = opts[:auth_names] || []
+      auth_names = opts[:auth_names] || ['blog_auth']
 
       new_options = opts.merge(
         :header_params => header_params,
@@ -123,7 +123,7 @@ module Anblog
       return_type = opts[:return_type] || 'Post' 
 
       # auth_names
-      auth_names = opts[:auth_names] || []
+      auth_names = opts[:auth_names] || ['blog_auth']
 
       new_options = opts.merge(
         :header_params => header_params,
@@ -177,7 +177,7 @@ module Anblog
       return_type = opts[:return_type] || 'Array<Post>' 
 
       # auth_names
-      auth_names = opts[:auth_names] || []
+      auth_names = opts[:auth_names] || ['blog_auth']
 
       new_options = opts.merge(
         :header_params => header_params,
@@ -239,7 +239,7 @@ module Anblog
       return_type = opts[:return_type] || 'Post' 
 
       # auth_names
-      auth_names = opts[:auth_names] || []
+      auth_names = opts[:auth_names] || ['blog_auth']
 
       new_options = opts.merge(
         :header_params => header_params,

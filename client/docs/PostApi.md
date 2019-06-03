@@ -1,6 +1,6 @@
 # Anblog::PostApi
 
-All URIs are relative to *https://localhost:9090*
+All URIs are relative to *https://anblog.cfapps.io*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

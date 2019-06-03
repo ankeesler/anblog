@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require 'logger'
+
+require 'anblog'
+
+if ARGV.length != 1
+  STDERR.puts "usage: anblog <.path.to.post>"
+  Kernel.exit(1)
+end
+
+path = ARGV[0]
+logger = Logger.new(STDOUT)
+logger.formatter = proc do |severity, datetime, progname, msg|
+  "anblog | #{severity} | #{msg}\n"
+end
+
+post_api_client = Anblog::PostApi.new
+editor = Anblog::Editor.new ENV['EDITOR']
+timer = Anblog::Timer.new
+tmp_path = Dir.tmpdir
+
+opener = Anblog::Opener.new(post_api_client, editor, timer, tmp_path)
+opener.open(path)
+
+logger.info('success :)')

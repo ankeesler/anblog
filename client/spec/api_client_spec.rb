@@ -120,14 +120,12 @@ describe Anblog::ApiClient do
 
   describe "#object_to_hash" do
     it 'ignores nils and includes empty arrays' do
-      # uncomment below to test object_to_hash for model
-      # api_client = Anblog::ApiClient.new
-      # _model = Anblog::ModelName.new
-      # update the model attribute below
-      # _model.id = 1
-      # update the expected value (hash) below
-      # expected = {id: 1, name: '', tags: []}
-      # expect(api_client.object_to_hash(_model)).to eq(expected)
+      #api_client = Anblog::ApiClient.new
+      #_model = Anblog::Post.new
+      #_model.path = '.some.new.path'
+      #_model.content = 'here is some content'
+      #expected = {path: '.some.new.path', content: 'here is some content'}
+      #expect(api_client.object_to_hash(_model)).to eq(expected)
     end
   end
 

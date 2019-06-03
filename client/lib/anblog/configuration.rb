@@ -129,7 +129,7 @@ module Anblog
 
     def initialize
       @scheme = 'https'
-      @host = 'localhost'
+      @host = 'anblog.cfapps.io'
       @base_path = ''
       @api_key = {}
       @api_key_prefix = {}
@@ -210,8 +210,12 @@ module Anblog
     def server_settings
       [
         {
+          url: "https://anblog.cfapps.io",
+          description: "Primary anblog service",
+        },
+        {
           url: "https://localhost:9090",
-          description: "No descriptoin provided",
+          description: "Development anblog service",
         }
       ]
     end

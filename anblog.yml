@@ -4,7 +4,10 @@ info:
   description: It's a *very* simple blog API. Code is [here](https://github.com/ankeesler/anblog).
   version: 1.0.0
 servers:
+- url: https://anblog.cfapps.io
+  description: Primary anblog service
 - url: https://localhost:9090
+  description: Development anblog service
 tags:
 - name: post
   description: A blog post

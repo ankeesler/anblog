@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**path** | **String** |  | [optional] 
-**content** | **String** |  | [optional] 
-**created** | **DateTime** |  | [optional] 
-**modified** | **DateTime** |  | [optional] 
+**path** | **String** | Unique path | 
+**content** | **String** | Actual text of blog post | 
+**created** | **Integer** | Seconds since 1970 | 
+**modified** | **Integer** | Seconds since 1970 | 
 
 ## Code Sample
 

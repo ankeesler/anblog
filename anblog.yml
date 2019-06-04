@@ -157,19 +157,28 @@ components:
   schemas:
     Post:
       type: object
+      required:
+      - path
+      - content
+      - created
+      - modified
       properties:
         path:
+          description: Unique path
           type: string
           maxLength: 100
           pattern: '^(\.[a-z0-9]+)+$'
         content:
+          description: Actual text of blog post
           type: string
         created:
-          type: string
-          format: date-time
+          description: Seconds since 1970
+          type: integer
+          format: int64
         modified:
-          type: string
-          format: date-time
+          description: Seconds since 1970
+          type: integer
+          format: int64
   securitySchemes:
     blog_auth:
       type: oauth2

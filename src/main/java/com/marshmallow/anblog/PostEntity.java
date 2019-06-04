@@ -11,8 +11,8 @@ public class PostEntity {
   private String path;
   @Lob
   private String content;
-  private OffsetDateTime created;
-  private OffsetDateTime modified;
+  private Long created;
+  private Long modified;
 
   public String getPath() {
     return path;
@@ -30,19 +30,19 @@ public class PostEntity {
     this.content = content;
   }
 
-  public OffsetDateTime getCreated() {
+  public Long getCreated() {
     return created;
   }
 
-  public void setCreated(OffsetDateTime created) {
+  public void setCreated(Long created) {
     this.created = created;
   }
 
-  public OffsetDateTime getModified() {
+  public Long getModified() {
     return modified;
   }
 
-  public void setModified(OffsetDateTime modified) {
+  public void setModified(Long modified) {
     this.modified = modified;
   }
 }

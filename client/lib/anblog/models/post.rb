@@ -14,12 +14,16 @@ require 'date'
 
 module Anblog
   class Post
+    # Unique path
     attr_accessor :path
 
+    # Actual text of blog post
     attr_accessor :content
 
+    # Seconds since 1970
     attr_accessor :created
 
+    # Seconds since 1970
     attr_accessor :modified
 
     # Attribute mapping from ruby-style variable name to JSON key.
@@ -37,8 +41,8 @@ module Anblog
       {
         :'path' => :'String',
         :'content' => :'String',
-        :'created' => :'DateTime',
-        :'modified' => :'DateTime'
+        :'created' => :'Integer',
+        :'modified' => :'Integer'
       }
     end
 
@@ -78,13 +82,29 @@ module Anblog
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if !@path.nil? && @path.to_s.length > 100
+      if @path.nil?
+        invalid_properties.push('invalid value for "path", path cannot be nil.')
+      end
+
+      if @path.to_s.length > 100
         invalid_properties.push('invalid value for "path", the character length must be smaller than or equal to 100.')
       end
 
       pattern = Regexp.new(/^(\.[a-z0-9]+)+$/)
-      if !@path.nil? && @path !~ pattern
+      if @path !~ pattern
         invalid_properties.push("invalid value for \"path\", must conform to the pattern #{pattern}.")
+      end
+
+      if @content.nil?
+        invalid_properties.push('invalid value for "content", content cannot be nil.')
+      end
+
+      if @created.nil?
+        invalid_properties.push('invalid value for "created", created cannot be nil.')
+      end
+
+      if @modified.nil?
+        invalid_properties.push('invalid value for "modified", modified cannot be nil.')
       end
 
       invalid_properties
@@ -93,20 +113,28 @@ module Anblog
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if !@path.nil? && @path.to_s.length > 100
-      return false if !@path.nil? && @path !~ Regexp.new(/^(\.[a-z0-9]+)+$/)
+      return false if @path.nil?
+      return false if @path.to_s.length > 100
+      return false if @path !~ Regexp.new(/^(\.[a-z0-9]+)+$/)
+      return false if @content.nil?
+      return false if @created.nil?
+      return false if @modified.nil?
       true
     end
 
     # Custom attribute writer method with validation
     # @param [Object] path Value to be assigned
     def path=(path)
-      if !path.nil? && path.to_s.length > 100
+      if path.nil?
+        fail ArgumentError, 'path cannot be nil'
+      end
+
+      if path.to_s.length > 100
         fail ArgumentError, 'invalid value for "path", the character length must be smaller than or equal to 100.'
       end
 
       pattern = Regexp.new(/^(\.[a-z0-9]+)+$/)
-      if !path.nil? && path !~ pattern
+      if path !~ pattern
         fail ArgumentError, "invalid value for \"path\", must conform to the pattern #{pattern}."
       end
 

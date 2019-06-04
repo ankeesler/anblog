@@ -16,7 +16,7 @@ logger.formatter = proc do |severity, datetime, progname, msg|
 end
 
 configuration = Anblog::Configuration.new do |c|
-  c.debugging = true
+  c.debugging = false
   c.logger = logger
 end
 api_client = Anblog::ApiClient.new configuration

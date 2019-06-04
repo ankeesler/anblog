@@ -45,17 +45,15 @@ dependencies {
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'org.openapitools:jackson-databind-nullable:0.1.0'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     implementation 'javax.validation:validation-api'
 
-    //implementation 'javax.persistence:persistence-api:1.0.2'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-cloud-connectors'
     implementation 'mysql:mysql-connector-java'
 
-    implementation 'org.springframework.boot:spring-boot-starter-cloud-connectors'
-
-    // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.h2database:h2'
 }
 
 // Define the main class for the application
@@ -67,7 +65,7 @@ task buildJavaServer(type: org.openapitools.generator.gradle.plugin.tasks.Genera
     outputDir = "$buildDir/generated/sources/openapi"
     configOptions = [
             basePackage: "com.marshmallow.anblog",
-            delegatePattern: true
+            delegatePattern: true,
     ]
 }
 

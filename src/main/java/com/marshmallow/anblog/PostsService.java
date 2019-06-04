@@ -57,8 +57,8 @@ public class PostsService implements PostsApiDelegate {
   public ResponseEntity<Post> updatePost(final String path, final Post post) {
     final Optional<PostEntity> entity = postRepository.findById(path);
     if (entity.isPresent()) {
-      postRepository.save(entity.get());
-      return new ResponseEntity<>(entityToPost(entity.get()), HttpStatus.OK);
+      postRepository.save(postToEntity(post));
+      return new ResponseEntity<>(post, HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

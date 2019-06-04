@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PostsService implements PostsApiDelegate {
+public class PostService implements PostsApiDelegate {
 
   @Autowired
   private PostRepository postRepository;

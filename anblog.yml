@@ -16,8 +16,15 @@ paths:
     get:
       tags:
       - post
-      summary: Get all posts
+      summary: Get all posts in ascending alphanumeric order of path
       operationId: getAllPosts
+      parameters:
+      - name: prefix
+        in: query
+        description: A path prefix used to filter returned posts
+        required: false
+        schema:
+          type: string
       responses:
         200:
           description: successful operation
@@ -29,8 +36,8 @@ paths:
                   $ref: '#/components/schemas/Post'
       security:
       - blog_auth:
-        - write:posts
-        - read:posts
+        - post:write
+        - post:read
     post:
       tags:
         - post
@@ -55,8 +62,8 @@ paths:
           content: {}
       security:
       - blog_auth:
-        - write:posts
-        - read:posts
+        - post:write
+        - post:read
   /posts/{postPath}:
     get:
       tags:
@@ -83,8 +90,8 @@ paths:
           content: {}
       security:
       - blog_auth:
-        - write:posts
-        - read:posts
+        - post:write
+        - post:read
     put:
       tags:
       - post
@@ -122,8 +129,8 @@ paths:
           content: {}
       security:
       - blog_auth:
-        - write:posts
-        - read:posts
+        - post:write
+        - post:read
     delete:
       tags:
       - post
@@ -151,8 +158,8 @@ paths:
           content: {}
       security:
       - blog_auth:
-        - write:posts
-        - read:posts
+        - post:write
+        - post:read
 components:
   schemas:
     Post:
@@ -186,5 +193,5 @@ components:
         implicit:
           authorizationUrl: https://google.com/oauth/authorize
           scopes:
-            write:posts: modify posts in your account
-            read:posts: read posts in your account
+            post:write: modify posts in your account
+            post:read: read posts in your account

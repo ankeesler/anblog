@@ -141,16 +141,18 @@ module Anblog
       return data, status_code, headers
     end
 
-    # Get all posts
+    # Get all posts in ascending alphanumeric order of path
     # @param [Hash] opts the optional parameters
+    # @option opts [String] :prefix A path prefix used to filter returned posts
     # @return [Array<Post>]
     def get_all_posts(opts = {})
       data, _status_code, _headers = get_all_posts_with_http_info(opts)
       data
     end
 
-    # Get all posts
+    # Get all posts in ascending alphanumeric order of path
     # @param [Hash] opts the optional parameters
+    # @option opts [String] :prefix A path prefix used to filter returned posts
     # @return [Array<(Array<Post>, Integer, Hash)>] Array<Post> data, response status code and response headers
     def get_all_posts_with_http_info(opts = {})
       if @api_client.config.debugging
@@ -161,6 +163,7 @@ module Anblog
 
       # query parameters
       query_params = opts[:query_params] || {}
+      query_params[:'prefix'] = opts[:'prefix'] if !opts[:'prefix'].nil?
 
       # header parameters
       header_params = opts[:header_params] || {}

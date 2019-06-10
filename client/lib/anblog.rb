@@ -18,6 +18,7 @@ require 'anblog/configuration'
 require 'anblog/opener'
 require 'anblog/editor'
 require 'anblog/timer'
+require 'anblog/treeer'
 
 # Models
 require 'anblog/models/post'

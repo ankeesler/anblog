@@ -7,14 +7,14 @@
  */
 
 buildscript {
-  repositories {
-    mavenLocal()
-    mavenCentral()
-  }
-  dependencies {
-    classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.5.RELEASE"
-    classpath "org.openapitools:openapi-generator-gradle-plugin:4.0.0"
-  }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.5.RELEASE"
+        classpath "org.openapitools:openapi-generator-gradle-plugin:4.0.0"
+    }
 }
 
 plugins {
@@ -49,38 +49,42 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-cloud-connectors'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.5.RELEASE'
     implementation 'mysql:mysql-connector-java'
+    implementation 'com.h2database:h2'
 
-    testImplementation 'junit:junit:4.12'
+//    testImplementation 'junit:junit:4.12'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.h2database:h2'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 // Define the main class for the application
 mainClassName = 'com.marshmallow.anblog.OpenAPI2SpringBoot'
 
-task buildJavaServer(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask){
+task buildJavaServer(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
     generatorName = "spring"
     inputSpec = "anblog.yml"
     outputDir = "$buildDir/generated/sources/openapi"
     configOptions = [
-            basePackage: "com.marshmallow.anblog",
+            basePackage    : "com.marshmallow.anblog",
             delegatePattern: true,
     ]
 }
 
-task buildRubyClient(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask){
+task buildRubyClient(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
     generatorName = "ruby"
     inputSpec = "anblog.yml"
     outputDir = "$rootDir/client"
     configOptions = [
-            moduleName: "Anblog",
-            gemName: "anblog",
-            gemVersion: "1.0.0",
-            gemHomepage: "https://github.com/ankeesler/anblog",
-            gemSummary: "A command line client for Anblog",
+            moduleName    : "Anblog",
+            gemName       : "anblog",
+            gemVersion    : "1.0.0",
+            gemHomepage   : "https://github.com/ankeesler/anblog",
+            gemSummary    : "A command line client for Anblog",
             gemDescription: "This gem provides a command line user interface for an Anblog API",
-            gemAuthor: "Andrew Keesler"
+            gemAuthor     : "Andrew Keesler"
     ]
 }
 

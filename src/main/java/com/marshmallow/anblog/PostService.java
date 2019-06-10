@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,11 +19,15 @@ public class PostService implements PostsApiDelegate {
   private PostRepository postRepository;
 
   @Override
-  public ResponseEntity<List<Post>> getAllPosts() {
+  public ResponseEntity<List<Post>> getAllPosts(final String prefix) {
     final List<Post> posts = new ArrayList<Post>();
+    final Iterable<PostEntity> entities = postRepository.findAll();
     for (final PostEntity entity : postRepository.findAll()) {
-      posts.add(entityToPost(entity));
+      if (prefix == null || entity.getPath().startsWith(prefix)) {
+        posts.add(entityToPost(entity));
+      }
     }
+    posts.sort(Comparator.comparing(Post::getPath));
     return new ResponseEntity<>(posts, HttpStatus.OK);
   }
 

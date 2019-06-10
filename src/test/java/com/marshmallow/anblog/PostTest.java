@@ -8,6 +8,7 @@ import org.openapitools.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OpenAPI2SpringBoot.class)
 @Transactional
+@ActiveProfiles("test")
 public class PostTest {
 
   private MockMvc mockMvc;
@@ -125,8 +127,42 @@ public class PostTest {
     assertEquals(posts[0], postFromJson(delete("/posts/.some.path.1")));
     assertEquals(posts[1], postFromJson(delete("/posts/.some.path.2")));
 
-    assertArrayEquals(new Post[] { posts[2] }, postsFromJson(get("/posts")));
+    assertArrayEquals(new Post[]{posts[2]}, postsFromJson(get("/posts")));
     assertEquals(posts[2], postFromJson(get("/posts/.some.path.3")));
+  }
+
+  @Test
+  public void getPostsByPrefix() throws Exception {
+    final Post[] posts = new Post[]{
+            new Post()
+                    .path(".some.path.9")
+                    .content("some content\n\non multiple lines\n\nfor post 1")
+                    .created(1L)
+                    .modified(2L),
+            new Post()
+                    .path(".some.path.1")
+                    .content("some content\n\non multiple lines\n\nfor post 1")
+                    .created(1L)
+                    .modified(2L),
+            new Post()
+                    .path(".some.other.path.2")
+                    .content("some content\n\non multiple lines\n\nfor post 2")
+                    .created(3L)
+                    .modified(4L),
+            new Post()
+                    .path(".some.path.3")
+                    .content("some content\n\non multiple lines\n\nfor post 3")
+                    .created(5L)
+                    .modified(6L),
+    };
+    for (final Post post : posts) {
+      assertEquals(post, postFromJson(post("/posts", postToJson(post))));
+    }
+
+    assertArrayEquals(
+            new Post[] { posts[1], posts[3], posts[0] },
+            postsFromJson(get("/posts?prefix=.some.path"))
+    );
   }
 
   private String get(final String path) throws Exception {

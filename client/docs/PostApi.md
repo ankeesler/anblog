@@ -6,7 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**add_post**](PostApi.md#add_post) | **POST** /posts | Add a new post
 [**delete_post**](PostApi.md#delete_post) | **DELETE** /posts/{postPath} | Deletes a post
-[**get_all_posts**](PostApi.md#get_all_posts) | **GET** /posts | Get all posts
+[**get_all_posts**](PostApi.md#get_all_posts) | **GET** /posts | Get all posts in ascending alphanumeric order of path
 [**get_post_by_path**](PostApi.md#get_post_by_path) | **GET** /posts/{postPath} | Get post by path
 [**update_post**](PostApi.md#update_post) | **PUT** /posts/{postPath} | Update an existing post
 
@@ -114,9 +114,9 @@ Name | Type | Description  | Notes
 
 ## get_all_posts
 
-> Array&lt;Post&gt; get_all_posts
+> Array&lt;Post&gt; get_all_posts(opts)
 
-Get all posts
+Get all posts in ascending alphanumeric order of path
 
 ### Example
 
@@ -130,10 +130,13 @@ Anblog.configure do |config|
 end
 
 api_instance = Anblog::PostApi.new
+opts = {
+  prefix: 'prefix_example' # String | A path prefix used to filter returned posts
+}
 
 begin
-  #Get all posts
-  result = api_instance.get_all_posts
+  #Get all posts in ascending alphanumeric order of path
+  result = api_instance.get_all_posts(opts)
   p result
 rescue Anblog::ApiError => e
   puts "Exception when calling PostApi->get_all_posts: #{e}"
@@ -142,7 +145,10 @@ end
 
 ### Parameters
 
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **prefix** | **String**| A path prefix used to filter returned posts | [optional] 
 
 ### Return type
 

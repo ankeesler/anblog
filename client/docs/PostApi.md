@@ -25,8 +25,9 @@ Add a new post
 require 'anblog'
 # setup authorization
 Anblog.configure do |config|
-  # Configure OAuth2 access token for authorization: blog_auth
-  config.access_token = 'YOUR ACCESS TOKEN'
+  # Configure HTTP basic authorization: blog_auth
+  config.username = 'YOUR USERNAME'
+  config.password = 'YOUR PASSWORD'
 end
 
 api_instance = Anblog::PostApi.new
@@ -75,8 +76,9 @@ Deletes a post
 require 'anblog'
 # setup authorization
 Anblog.configure do |config|
-  # Configure OAuth2 access token for authorization: blog_auth
-  config.access_token = 'YOUR ACCESS TOKEN'
+  # Configure HTTP basic authorization: blog_auth
+  config.username = 'YOUR USERNAME'
+  config.password = 'YOUR PASSWORD'
 end
 
 api_instance = Anblog::PostApi.new
@@ -125,8 +127,9 @@ Get all posts in ascending alphanumeric order of path
 require 'anblog'
 # setup authorization
 Anblog.configure do |config|
-  # Configure OAuth2 access token for authorization: blog_auth
-  config.access_token = 'YOUR ACCESS TOKEN'
+  # Configure HTTP basic authorization: blog_auth
+  config.username = 'YOUR USERNAME'
+  config.password = 'YOUR PASSWORD'
 end
 
 api_instance = Anblog::PostApi.new
@@ -179,8 +182,9 @@ Returns a single post
 require 'anblog'
 # setup authorization
 Anblog.configure do |config|
-  # Configure OAuth2 access token for authorization: blog_auth
-  config.access_token = 'YOUR ACCESS TOKEN'
+  # Configure HTTP basic authorization: blog_auth
+  config.username = 'YOUR USERNAME'
+  config.password = 'YOUR PASSWORD'
 end
 
 api_instance = Anblog::PostApi.new
@@ -229,8 +233,9 @@ Update an existing post
 require 'anblog'
 # setup authorization
 Anblog.configure do |config|
-  # Configure OAuth2 access token for authorization: blog_auth
-  config.access_token = 'YOUR ACCESS TOKEN'
+  # Configure HTTP basic authorization: blog_auth
+  config.username = 'YOUR USERNAME'
+  config.password = 'YOUR PASSWORD'
 end
 
 api_instance = Anblog::PostApi.new

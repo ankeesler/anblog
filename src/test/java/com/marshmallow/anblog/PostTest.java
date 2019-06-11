@@ -1,11 +1,11 @@
 package com.marshmallow.anblog;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openapitools.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -13,30 +13,23 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OpenAPI2SpringBoot.class)
 @Transactional
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class PostTest {
 
-  private MockMvc mockMvc;
-
   @Autowired
-  private WebApplicationContext wac;
-
-  @Before
-  public void setup() {
-    mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-  }
+  private MockMvc mockMvc;
 
   @Test
   public void createPosts() throws Exception {
@@ -160,7 +153,7 @@ public class PostTest {
     }
 
     assertArrayEquals(
-            new Post[] { posts[1], posts[3], posts[0] },
+            new Post[]{posts[1], posts[3], posts[0]},
             postsFromJson(get("/posts?prefix=.some.path"))
     );
   }
@@ -169,6 +162,7 @@ public class PostTest {
     return mockMvc.perform(MockMvcRequestBuilders
             .get(path)
             .accept(MediaType.APPLICATION_JSON)
+            .with(user("anblog_default_username").password("anblog_default_password"))
     )
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
@@ -180,6 +174,7 @@ public class PostTest {
             .put(path)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
+            .with(user("anblog_default_username").password("anblog_default_password"))
             .content(content)
     )
             .andDo(MockMvcResultHandlers.print())
@@ -192,6 +187,7 @@ public class PostTest {
             .post(path)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
+            .with(user("anblog_default_username").password("anblog_default_password"))
             .content(content)
     )
             .andDo(MockMvcResultHandlers.print())
@@ -203,6 +199,7 @@ public class PostTest {
     return mockMvc.perform(MockMvcRequestBuilders
             .delete(path)
             .accept(MediaType.APPLICATION_JSON)
+            .with(user("anblog_default_username").password("anblog_default_password"))
     )
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())

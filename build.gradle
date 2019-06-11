@@ -52,13 +52,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
-//    implementation 'org.springframework.security:spring-security-config'
-//    implementation 'org.springframework.security:spring-security-oauth2-jose'
-//    implementation 'org.springframework.security:spring-security-oauth2-resource-server'
-//    implementation 'org.springframework.security.oauth:spring-security-oauth2:2.3.2.RELEASE'
-//    implementation 'org.springframework.security:spring-security-jwt:1.0.9.RELEASE'
-//    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.5.RELEASE'
-
     implementation 'mysql:mysql-connector-java'
     implementation 'com.h2database:h2'
 
@@ -94,18 +87,7 @@ task buildRubyClient(type: org.openapitools.generator.gradle.plugin.tasks.Genera
     ]
 }
 
-task buildNodejsServer(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
-    generatorName = "go-server"
-    inputSpec = "anblog.yml"
-    outputDir = "$rootDir/server"
-    configOptions = [
-      packageName : "api",
-      packageVersion : "1.0.0",
-      sourceFolder : "api"
-    ]
-}
-
-task codegen(dependsOn: ["buildJavaServer", "buildRubyClient", "buildNodejsServer"])
+task codegen(dependsOn: ["buildJavaServer", "buildRubyClient"])
 
 openApiValidate {
     inputSpec = "anblog.yml"

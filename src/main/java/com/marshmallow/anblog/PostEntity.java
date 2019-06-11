@@ -1,7 +1,9 @@
 package com.marshmallow.anblog;
 
-import javax.persistence.*;
-import java.time.OffsetDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Entity
 public class PostEntity {

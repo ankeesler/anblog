@@ -198,10 +198,10 @@ module Anblog
       {
         'blog_auth' =>
           {
-            type: 'oauth2',
+            type: 'basic',
             in: 'header',
             key: 'Authorization',
-            value: "Bearer #{access_token}"
+            value: basic_auth_token
           },
       }
     end

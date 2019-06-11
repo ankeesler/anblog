@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @Profile("cloud")
-public class CloudDataSourceConfig  extends AbstractCloudConfig {
+public class CloudDataSourceConfig extends AbstractCloudConfig {
   @Bean
   public DataSource dataSource() {
     return connectionFactory().dataSource();

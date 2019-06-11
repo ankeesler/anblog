@@ -1,9 +1,9 @@
-require 'spec_helper'
+require 'anblog/cli/lister'
 
-describe Anblog::Treeer do
+describe Anblog::CLI::Lister do
   let(:post_api_client) { instance_double(Anblog::PostApi) }
 
-  let(:treeer) { Anblog::Treeer.new(post_api_client) }
+  let(:lister) { Anblog::CLI::Lister.new(post_api_client) }
 
   let(:expected_posts) {
     [
@@ -14,25 +14,26 @@ describe Anblog::Treeer do
     ]
   }
 
-  describe 'open' do
+  describe 'list' do
     context 'when the root path is passed' do
       it 'returns all paths' do
         expect(post_api_client).to receive(:get_all_posts)
                                      .and_return(expected_posts)
 
-        actual_posts = treeer.tree '.'
+        actual_posts = lister.list '.'
         expect(actual_posts).to eq(expected_posts)
       end
     end
 
     context 'when a sub path is passed' do
       it 'returns all paths under that path' do
+        expected_filtered_posts = expected_posts.select { |p| p.path.start_with? '.dir1a' }
         expect(post_api_client).to receive(:get_all_posts)
                                      .with(:prefix => '.dir1a')
-                                     .and_return(expected_posts)
+                                     .and_return(expected_filtered_posts)
 
-        actual_posts = treeer.tree '.dir1a'
-        expect(actual_posts).to eq(expected_posts.select { |p| p.path.start_with? '.dir1a' })
+        actual_posts = lister.list '.dir1a'
+        expect(actual_posts).to eq(expected_filtered_posts)
       end
     end
   end

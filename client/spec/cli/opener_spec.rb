@@ -1,11 +1,12 @@
-require 'spec_helper'
+require 'anblog/cli/editor'
+require 'anblog/cli/opener'
 
-describe Anblog::Opener do
+describe Anblog::CLI::Opener do
   let(:post_api_client) { instance_double(Anblog::PostApi) }
-  let(:editor) { instance_double(Anblog::Editor) }
+  let(:editor) { instance_double(Anblog::CLI::Editor) }
   let(:timer) { class_double(Time) }
 
-  let(:opener) { Anblog::Opener.new(post_api_client, editor, timer, '/tmp') }
+  let(:opener) { Anblog::CLI::Opener.new(post_api_client, editor, timer, '/tmp') }
 
   let(:expected_post) {
     expected_post = Anblog::Post.new
@@ -42,12 +43,12 @@ describe Anblog::Opener do
 )
             actual_content = File.read(file)
             expect(expected_content).to eq(actual_content)
-  
+
             open(file, 'a') do |f|
               f << "some content\n\non multiple lines"
             end
           end
-          
+
           opener.open '.some.path'
         end
       end
@@ -74,7 +75,7 @@ some content
 on multiple lines)
             actual_content = File.read(file)
             expect(expected_content).to eq(actual_content)
-  
+
             new_content = %(#
 # path:     .some.path
 # created:  now
@@ -88,7 +89,7 @@ on multiple lines)
               f << new_content
             end
           end
-          
+
           opener.open '.some.path'
         end
       end
@@ -116,12 +117,12 @@ some content
 on multiple lines)
             actual_content = File.read(file)
             expect(expected_content).to eq(actual_content)
-  
+
             open(file, 'a') do |f|
               f << "some content\n\non multiple lines"
             end
           end
-          
+
           opener.open '.some.path'
         end
       end

@@ -1,5 +1,6 @@
 package com.marshmallow.anblog;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,7 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
@@ -72,8 +77,7 @@ class UserConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/actuator/**").permitAll()
             .mvcMatchers(HttpMethod.GET, "/posts").hasAuthority("post:read")
             .anyRequest().authenticated()
-            .and().oauth2ResourceServer().bearerTokenResolver()
-            .and().httpBasic();
+            .and().oauth2ResourceServer().jwt();
   }
 
   @Bean
@@ -101,5 +105,28 @@ class UserConfig extends WebSecurityConfigurerAdapter {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+  }
+}
+
+@Configuration
+@EnableResourceServer
+class ResourceConfig extends ResourceServerConfigurerAdapter {
+
+  @Autowired
+  private TokenStore tokenStore;
+
+  @Override
+  public void configure(final ResourceServerSecurityConfigurer security) throws Exception {
+    security.resourceId("post-resource").tokenStore(tokenStore);
+  }
+
+  @Override
+  public void configure(final HttpSecurity http) throws Exception {
+    // @formatter:off
+    http
+            .antMatcher("/messages/**")
+            .authorizeRequests()
+            .antMatchers("/messages/**").access("#oauth2.hasScope('message.read') or hasRole('CLIENT') or hasRole('MESSAGING_CLIENT')");
+    // @formatter:on
   }
 }

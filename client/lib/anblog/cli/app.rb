@@ -44,10 +44,13 @@ module Anblog
         opener = Opener.new(post_api_client, editor, timer, tmp_path)
         lister = Lister.new(post_api_client)
 
-        puts Runner.new([
+        s = Runner.new([
           OpenCommand.new(opener),
           ListCommand.new(lister),
-        ]).run args
+                       ]).run args
+        if s.length > 0
+          puts s
+        end
       end
     end
   end

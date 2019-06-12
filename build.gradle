@@ -102,3 +102,8 @@ bootRun { systemProperties = System.properties }
 task cfPush(type: Exec, dependsOn: [test, bootJar]) {
     commandLine 'cf', 'push'
 }
+
+task testClient(type: Exec) {
+    commandLine 'rake', 'rubocop', 'spec'
+    workingDir 'client'
+}

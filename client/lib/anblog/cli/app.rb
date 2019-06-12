@@ -1,5 +1,3 @@
-require 'optparse'
-
 require 'anblog'
 
 # TODO: but why!
@@ -17,8 +15,25 @@ module Anblog
       def run(args)
         debug = ENV['ANBLOG_DEBUG'] != nil
 
+        begin
+          really_run(args, debug)
+        rescue => e
+          puts "error: #{e}"
+          if debug
+            puts "\nBACKTRACE:"
+            e.backtrace.each { |b| puts "  #{b}" }
+          end
+        end
+      end
+
+      def really_run(args, debug)
+        username = ENV['ANBLOG_USERNAME'] || fail("Must set ANBLOG_USERNAME")
+        password = ENV['ANBLOG_PASSWORD'] || fail("Must set ANBLOG_PASSWORD")
+
         configuration = Anblog::Configuration.new do |c|
           c.debugging = debug
+          c.username = username
+          c.password = password
         end
         api_client = Anblog::ApiClient.new configuration
         post_api_client = Anblog::PostApi.new api_client

@@ -16,7 +16,7 @@ module Anblog
         rescue ApiError => ae
           status_code = ae.code
         end
-    
+
         post = data
         new_post = false
         if post == nil
@@ -26,7 +26,7 @@ module Anblog
     
         h = make_file_header post
         file = "#{@tmp_path}/anblog/#{path}"
-        FileUtils.mkdir_p File.dirname(file)
+        FileUtils.mkdir_p File.dirname file
         File.open(file, 'w') do |f|
           f << h
           f << post.content
@@ -48,10 +48,12 @@ module Anblog
       private
     
       def make_file_header(post)
+        created = Time.at(post.created).strftime "%F %T"
+        modified = Time.at(post.modified).strftime "%F %T"
         %(#
 # path:     #{post.path}
-# created:  #{post.created}
-# modified: #{post.modified}
+# created:  #{created}
+# modified: #{modified}
 #
 # lines starting with '#' will be ignored
 # empty messages will not be saved

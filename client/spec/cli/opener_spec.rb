@@ -6,23 +6,22 @@ describe Anblog::CLI::Opener do
   let(:editor) { instance_double(Anblog::CLI::Editor) }
   let(:timer) { class_double(Time) }
 
-  let(:opener) { Anblog::CLI::Opener.new(post_api_client, editor, timer, '/tmp') }
+  let(:opener) { Anblog::CLI::Opener.new(post_api_client, editor, timer, '/tmp' ) }
 
   let(:expected_post) {
     expected_post = Anblog::Post.new
     expected_post.path = '.some.path'
     expected_post.content = "some content\n\non multiple lines"
-    expected_post.created = 'now'
-    expected_post.modified = 'now'
+    expected_post.created = 1
+    expected_post.modified = 1
     expected_post
   }
 
   describe 'open' do
     context 'the post does not exist' do
       context 'the user enters uncommented lines' do
-
         it 'edits the file and creates a post' do
-          expect(timer).to receive(:now).and_return('now')
+          expect(timer).to receive(:now).and_return(1)
           expect(post_api_client).to receive(:get_post_by_path)
                                       .with('.some.path')
                                       .and_raise(Anblog::ApiError.new(
@@ -34,8 +33,8 @@ describe Anblog::CLI::Opener do
           expect(editor).to receive(:edit) do |file|
             expected_content = %(#
 # path:     .some.path
-# created:  now
-# modified: now
+# created:  1969-12-31 19:00:01
+# modified: 1969-12-31 19:00:01
 #
 # lines starting with '#' will be ignored
 # empty messages will not be saved
@@ -55,17 +54,17 @@ describe Anblog::CLI::Opener do
     end
 
     context 'the post exists' do
-      context 'when the user does not any uncommented lines' do
+      context 'when the user does not update any uncommented lines' do
         it 'edits the file and does not update the post' do
-          expect(timer).to receive(:now).and_return('now')
+          expect(timer).to receive(:now).and_return(2)
           expect(post_api_client).to receive(:get_post_by_path)
                                       .with('.some.path')
                                       .and_return(expected_post)
           expect(editor).to receive(:edit) do |file|
             expected_content = %(#
 # path:     .some.path
-# created:  now
-# modified: now
+# created:  1969-12-31 19:00:01
+# modified: 1969-12-31 19:00:01
 #
 # lines starting with '#' will be ignored
 # empty messages will not be saved
@@ -78,8 +77,8 @@ on multiple lines)
 
             new_content = %(#
 # path:     .some.path
-# created:  now
-# modified: now
+# created:  1969-12-31 19:00:01
+# modified: 1969-12-31 19:00:01
 #
 # lines starting with '#' will be ignored
 # empty messages will not be saved
@@ -96,18 +95,22 @@ on multiple lines)
 
       context 'the user enters uncommented lines' do
         it 'edits the file and updates the post' do
-          expect(timer).to receive(:now).and_return('now')
+          expected_new_post = Marshal.load(Marshal.dump(expected_post))
+          expected_new_post.modified = 2
+          expected_new_post.content << "\nsome content\n\non multiple lines"
+
+          expect(timer).to receive(:now).and_return(2)
           expect(post_api_client).to receive(:get_post_by_path)
                                       .with('.some.path')
                                       .and_return(expected_post)
           expect(post_api_client).to receive(:update_post)
-                                      .with('.some.path', expected_post)
-                                      .and_return(expected_post)
+                                      .with('.some.path', expected_new_post)
+                                      .and_return(expected_new_post)
           expect(editor).to receive(:edit) do |file|
             expected_content = %(#
 # path:     .some.path
-# created:  now
-# modified: now
+# created:  1969-12-31 19:00:01
+# modified: 1969-12-31 19:00:01
 #
 # lines starting with '#' will be ignored
 # empty messages will not be saved
@@ -119,7 +122,7 @@ on multiple lines)
             expect(expected_content).to eq(actual_content)
 
             open(file, 'a') do |f|
-              f << "some content\n\non multiple lines"
+              f << "\nsome content\n\non multiple lines"
             end
           end
 

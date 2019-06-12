@@ -4,7 +4,7 @@ module Anblog
   module CLI
     class Timer
       def now
-        Time.now.iso8601
+        Time.now.to_i
       end
     end
   end

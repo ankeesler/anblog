@@ -17,7 +17,7 @@ module Anblog
           return "unknown command: #{name}"
         end
 
-        return command.action args[1..args.length-1]
+        command.action args[1..args.length - 1]
       end
 
       def usage
@@ -26,9 +26,8 @@ module Anblog
           s << "usage: anblog #{c.name}\n"
           s << "  #{c.description}\n"
         end
-        return s
+        s
       end
-
     end
   end
 end

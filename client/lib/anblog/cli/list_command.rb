@@ -6,11 +6,11 @@ module Anblog
       end
 
       def name
-        return 'list'
+        'list'
       end
 
       def description
-        return 'list post paths'
+        'list post paths'
       end
 
       def action(args)
@@ -19,7 +19,7 @@ module Anblog
         else
           path = args[0]
         end
-        return @lister.list(path).map{ |p| p.path }.join("\n")
+        @lister.list(path).map { |p| p.path }.join("\n")
       end
     end
   end

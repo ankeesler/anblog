@@ -6,7 +6,7 @@ module Anblog
       end
 
       def list(path)
-        return @post_api_client.get_all_posts(:prefix => path)
+        @post_api_client.get_all_posts(:prefix => path)
       end
     end
   end

@@ -47,35 +47,34 @@ module Anblog
     
       private
     
-      def make_file_header(post)
-        created = Time.at(post.created).strftime "%F %T"
-        modified = Time.at(post.modified).strftime "%F %T"
-        %(#
-# path:     #{post.path}
-# created:  #{created}
-# modified: #{modified}
-#
-# lines starting with '#' will be ignored
-# empty messages will not be saved
-#
-)
-      end
+        def make_file_header(post)
+          created = Time.at(post.created).strftime "%F %T"
+          modified = Time.at(post.modified).strftime "%F %T"
+          %(#
+  # path:     #{post.path}
+  # created:  #{created}
+  # modified: #{modified}
+  #
+  # lines starting with '#' will be ignored
+  # empty messages will not be saved
+  #
+  ).gsub(/^\s+/, '')
+        end
 
-      def strip_file_comments(data)
-        content = []
-        data.each_line do |line|
-          unless line.start_with? '#'
-            content << line.strip
+        def strip_file_comments(data)
+          content = []
+          data.each_line do |line|
+            unless line.start_with? '#'
+              content << line.strip
+            end
+          end
+  
+          if content.reject { |c| c.empty? }.length == 0
+            nil
+          else
+            content.join("\n")
           end
         end
-
-        if content.reject { |c| c.empty? }.length == 0
-          nil
-        else
-          content.join("\n")
-        end
-      end
-
     end
   end
 end

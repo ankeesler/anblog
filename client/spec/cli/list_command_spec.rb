@@ -18,7 +18,7 @@ describe Anblog::CLI::ListCommand do
     it 'calls lister with root path' do
       expect(lister).to receive(:list).with('.').and_return(expected_posts)
       s = list_command.action []
-      expect(s).to eq(expected_posts.map{|p| p.path}.join "\n")
+      expect(s).to eq(expected_posts.map { |p| p.path }.join "\n")
     end
   end
 
@@ -26,7 +26,7 @@ describe Anblog::CLI::ListCommand do
     it 'calls the lister with the first argument' do
       expect(lister).to receive(:list).with('.some.path').and_return(expected_posts)
       s = list_command.action ['.some.path']
-      expect(s).to eq(expected_posts.map{|p| p.path}.join "\n")
+      expect(s).to eq(expected_posts.map { |p| p.path }.join "\n")
     end
   end
 end

@@ -6,7 +6,7 @@ describe Anblog::CLI::Opener do
   let(:editor) { instance_double(Anblog::CLI::Editor) }
   let(:timer) { class_double(Time) }
 
-  let(:opener) { Anblog::CLI::Opener.new(post_api_client, editor, timer, '/tmp' ) }
+  let(:opener) { Anblog::CLI::Opener.new(post_api_client, editor, timer, '/tmp') }
 
   let(:expected_post) {
     expected_post = Anblog::Post.new

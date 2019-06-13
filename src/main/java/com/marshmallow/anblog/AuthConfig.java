@@ -18,6 +18,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
   public void configure(final HttpSecurity http) throws Exception {
     http
             .csrf().disable()
+            .authorizeRequests().antMatchers("/download").permitAll().and()
             .authorizeRequests().anyRequest().authenticated().and()
             .httpBasic();
   }

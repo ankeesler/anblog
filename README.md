@@ -11,3 +11,4 @@ Client CLI: [client](client)
 
 To run the server: `./gradlew bootRun`  
 To regenerate the OpenAPI stuff: `./gradlew codegen`  
+To download the client: `curl anblog.cfapps.io/download | bash`

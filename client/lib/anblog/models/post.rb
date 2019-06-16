@@ -90,7 +90,7 @@ module Anblog
         invalid_properties.push('invalid value for "path", the character length must be smaller than or equal to 100.')
       end
 
-      pattern = Regexp.new(/^(\.[a-z0-9]+)+$/)
+      pattern = Regexp.new(/^(\.[a-z0-9\-]+)+$/)
       if @path !~ pattern
         invalid_properties.push("invalid value for \"path\", must conform to the pattern #{pattern}.")
       end
@@ -115,7 +115,7 @@ module Anblog
     def valid?
       return false if @path.nil?
       return false if @path.to_s.length > 100
-      return false if @path !~ Regexp.new(/^(\.[a-z0-9]+)+$/)
+      return false if @path !~ Regexp.new(/^(\.[a-z0-9\-]+)+$/)
       return false if @content.nil?
       return false if @created.nil?
       return false if @modified.nil?
@@ -133,7 +133,7 @@ module Anblog
         fail ArgumentError, 'invalid value for "path", the character length must be smaller than or equal to 100.'
       end
 
-      pattern = Regexp.new(/^(\.[a-z0-9]+)+$/)
+      pattern = Regexp.new(/^(\.[a-z0-9\-]+)+$/)
       if path !~ pattern
         fail ArgumentError, "invalid value for \"path\", must conform to the pattern #{pattern}."
       end

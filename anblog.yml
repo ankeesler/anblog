@@ -164,7 +164,7 @@ components:
           description: Unique path
           type: string
           maxLength: 100
-          pattern: '^(\.[a-z0-9]+)+$'
+          pattern: '^(\.[a-z0-9\-]+)+$'
         content:
           description: Actual text of blog post
           type: string

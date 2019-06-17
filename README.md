@@ -2,12 +2,6 @@
 
 It's a *very* simple blog API.
 
-## Install
-
-```
-$ curl anblog.cfapps.io/download | bash
-```
-
 ## Links
 
 OpenAPI spec: [anblog.yml](anblog.yml)  

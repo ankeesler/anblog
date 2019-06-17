@@ -107,3 +107,5 @@ task testClient(type: Exec) {
     commandLine 'rake', 'rubocop', 'spec'
     workingDir 'client'
 }
+
+test.dependsOn testClient

@@ -37,7 +37,7 @@ module Anblog
         end
         api_client = Anblog::ApiClient.new configuration
         post_api_client = Anblog::PostApi.new api_client
-        editor = Editor.new ENV['EDITOR']
+        editor = Editor.new ENV['EDITOR'] || "emacs"
         timer = Timer.new
         tmp_path = Dir.tmpdir
 

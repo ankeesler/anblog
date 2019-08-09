@@ -7,10 +7,10 @@ module Anblog
         @timer = timer
         @tmp_path = tmp_path
       end
-    
+
       def open(path)
         now = @timer.now
-    
+
         begin
           data = @post_api_client.get_post_by_path(path)
         rescue ApiError => ae
@@ -23,7 +23,7 @@ module Anblog
           post = Post.new :path => path, :created => now, :modified => now
           new_post = true
         end
-    
+
         h = make_file_header post
         file = "#{@tmp_path}/anblog/#{path}"
         FileUtils.mkdir_p File.dirname file
@@ -32,7 +32,7 @@ module Anblog
           f << post.content
         end
         @editor.edit file
-        
+
         content = strip_file_comments File.read(file)
         unless content == nil
           post.content = content
@@ -44,9 +44,9 @@ module Anblog
           end
         end
       end
-    
+
       private
-    
+
         def make_file_header(post)
           created = Time.at(post.created).strftime "%F %T"
           modified = Time.at(post.modified).strftime "%F %T"
@@ -65,10 +65,10 @@ module Anblog
           content = []
           data.each_line do |line|
             unless line.start_with? '#'
-              content << line.strip
+              content << line.rstrip
             end
           end
-  
+
           if content.reject { |c| c.empty? }.length == 0
             nil
           else

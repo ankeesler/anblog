@@ -11,7 +11,7 @@ describe Anblog::CLI::Opener do
   let(:expected_post) {
     expected_post = Anblog::Post.new
     expected_post.path = '.some.path'
-    expected_post.content = "some content\n\non multiple lines"
+    expected_post.content = "some content\n\non multiple lines\n  with spaces"
     expected_post.created = 1
     expected_post.modified = 1
     expected_post
@@ -44,7 +44,7 @@ describe Anblog::CLI::Opener do
             expect(expected_content).to eq(actual_content)
 
             open(file, 'a') do |f|
-              f << "some content\n\non multiple lines"
+              f << "some content\n\non multiple lines\n  with spaces"
             end
           end
 
@@ -71,7 +71,8 @@ describe Anblog::CLI::Opener do
 #
 some content
 
-on multiple lines)
+on multiple lines
+  with spaces)
             actual_content = File.read(file)
             expect(expected_content).to eq(actual_content)
 
@@ -97,7 +98,7 @@ on multiple lines)
         it 'edits the file and updates the post' do
           expected_new_post = Marshal.load(Marshal.dump(expected_post))
           expected_new_post.modified = 2
-          expected_new_post.content << "\nsome content\n\non multiple lines"
+          expected_new_post.content << "\nsome content\n\non multiple lines\n  with spaces"
 
           expect(timer).to receive(:now).and_return(2)
           expect(post_api_client).to receive(:get_post_by_path)
@@ -117,12 +118,13 @@ on multiple lines)
 #
 some content
 
-on multiple lines)
+on multiple lines
+  with spaces)
             actual_content = File.read(file)
             expect(expected_content).to eq(actual_content)
 
             open(file, 'a') do |f|
-              f << "\nsome content\n\non multiple lines"
+              f << "\nsome content\n\non multiple lines\n  with spaces"
             end
           end
 

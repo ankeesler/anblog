@@ -2,6 +2,7 @@ require 'anblog'
 
 # TODO: but why!
 require 'anblog/cli/editor'
+require 'anblog/cli/help_command'
 require 'anblog/cli/lister'
 require 'anblog/cli/list_command'
 require 'anblog/cli/opener'
@@ -45,8 +46,9 @@ module Anblog
         lister = Lister.new(post_api_client)
 
         s = Runner.new([
-          OpenCommand.new(opener),
+          HelpCommand.new,
           ListCommand.new(lister),
+          OpenCommand.new(opener),
                        ]).run args
         if s.length > 0
           puts s

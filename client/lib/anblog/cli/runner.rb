@@ -1,3 +1,5 @@
+require 'anblog/cli/help_command'
+
 module Anblog
   module CLI
     class Runner
@@ -15,6 +17,8 @@ module Anblog
         command = @commands.detect { |c| c.name == name }
         if command == nil
           return "unknown command: #{name}"
+        elsif command.is_a?(HelpCommand)
+          return usage
         end
 
         command.action args[1..args.length - 1]

@@ -10,7 +10,7 @@ module Anblog
       end
 
       def description
-        'list post paths'
+        'list post paths (with optional prefix)'
       end
 
       def action(args)

@@ -1,6 +1,8 @@
 require 'anblog'
 
 # TODO: but why!
+require 'anblog/cli/cat_command'
+require 'anblog/cli/catter'
 require 'anblog/cli/editor'
 require 'anblog/cli/help_command'
 require 'anblog/cli/lister'
@@ -42,10 +44,12 @@ module Anblog
         timer = Timer.new
         tmp_path = Dir.tmpdir
 
-        opener = Opener.new(post_api_client, editor, timer, tmp_path)
+        catter = Catter.new(post_api_client)
         lister = Lister.new(post_api_client)
+        opener = Opener.new(post_api_client, editor, timer, tmp_path)
 
         s = Runner.new([
+          CatCommand.new(catter),
           HelpCommand.new,
           ListCommand.new(lister),
           OpenCommand.new(opener),

@@ -25,6 +25,14 @@ paths:
         required: false
         schema:
           type: string
+      - name: $fields
+        in: query
+        description: The comma-separated list of fields to be returned in the response
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
       responses:
         200:
           description: successful operation
@@ -154,12 +162,6 @@ components:
   schemas:
     Post:
       type: object
-      required:
-      - path
-      - content
-      - created
-      - modified
-      - labels
       properties:
         path:
           description: Unique path

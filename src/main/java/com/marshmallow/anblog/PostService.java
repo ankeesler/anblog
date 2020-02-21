@@ -19,9 +19,8 @@ public class PostService implements PostsApiDelegate {
   private PostRepository postRepository;
 
   @Override
-  public ResponseEntity<List<Post>> getAllPosts(final String prefix) {
+  public ResponseEntity<List<Post>> getAllPosts(final String prefix, final List<String> fields) {
     final List<Post> posts = new ArrayList<Post>();
-    final Iterable<PostEntity> entities = postRepository.findAll();
     for (final PostEntity entity : postRepository.findAll()) {
       if (prefix == null || entity.getPath().startsWith(prefix)) {
         posts.add(entityToPost(entity));

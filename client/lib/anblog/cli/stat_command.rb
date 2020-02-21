@@ -25,7 +25,7 @@ module Anblog
 
         def stat(path)
           begin
-            post = @post_api_client.get_post_by_path(path)
+            post = @post_api_client.get_post_by_path(path, :fields => 'path,created,modified,labels')
           rescue ApiError => ae
             if ae.code == 404
               return "error: unknown post with path #{path}"

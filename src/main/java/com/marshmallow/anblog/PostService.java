@@ -20,10 +20,11 @@ public class PostService implements PostsApiDelegate {
 
   @Override
   public ResponseEntity<List<Post>> getAllPosts(final String prefix, final List<String> fields) {
+    // TODO: we should only be getting the fields that we care about from the repository!
     final List<Post> posts = new ArrayList<Post>();
     for (final PostEntity entity : postRepository.findAll()) {
       if (prefix == null || entity.getPath().startsWith(prefix)) {
-        posts.add(entityToPost(entity));
+        posts.add(entityToPost(entity, fields));
       }
     }
     posts.sort(Comparator.comparing(Post::getPath));
@@ -41,17 +42,17 @@ public class PostService implements PostsApiDelegate {
     final Optional<PostEntity> entity = postRepository.findById(path);
     if (entity.isPresent()) {
       postRepository.deleteById(path);
-      return new ResponseEntity<>(entityToPost(entity.get()), HttpStatus.OK);
+      return new ResponseEntity<>(entityToPost(entity.get(), null), HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
 
   @Override
-  public ResponseEntity<Post> getPostByPath(final String path) {
+  public ResponseEntity<Post> getPostByPath(final String path, final List<String> fields) {
     final Optional<PostEntity> entity = postRepository.findById(path);
     if (entity.isPresent()) {
-      return new ResponseEntity<>(entityToPost(entity.get()), HttpStatus.OK);
+      return new ResponseEntity<>(entityToPost(entity.get(), fields), HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -68,13 +69,19 @@ public class PostService implements PostsApiDelegate {
     }
   }
 
-  private static Post entityToPost(final PostEntity entity) {
-    return new Post()
-            .path(entity.getPath())
-            .content(entity.getContent())
-            .created(entity.getCreated())
-            .modified(entity.getModified())
-            .labels(entity.getLabels());
+  private static Post entityToPost(final PostEntity entity, final List<String> fields) {
+    final Post post = new Post();
+    if (fields == null || fields.contains("path"))
+      post.path(entity.getPath());
+    if (fields == null || fields.contains("content"))
+      post.content(entity.getContent());
+    if (fields == null || fields.contains("created"))
+      post.created(entity.getCreated());
+    if (fields == null || fields.contains("modified"))
+      post.modified(entity.getModified());
+    if (fields == null || fields.contains("labels"))
+      post.labels(entity.getLabels());
+    return post;
   }
 
   private static PostEntity postToEntity(final Post post) {

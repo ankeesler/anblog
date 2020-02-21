@@ -7,7 +7,7 @@ module Anblog
 
       def cat(path)
         begin
-          post = @post_api_client.get_post_by_path(path)
+          post = @post_api_client.get_post_by_path(path, :fields => 'content')
         rescue ApiError => ae
           status_code = ae.code
         end

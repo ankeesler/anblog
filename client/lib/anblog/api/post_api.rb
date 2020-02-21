@@ -144,6 +144,7 @@ module Anblog
     # Get all posts in ascending alphanumeric order of path
     # @param [Hash] opts the optional parameters
     # @option opts [String] :prefix A path prefix used to filter returned posts
+    # @option opts [Array<String>] :fields The comma-separated list of fields to be returned in the response
     # @return [Array<Post>]
     def get_all_posts(opts = {})
       data, _status_code, _headers = get_all_posts_with_http_info(opts)
@@ -153,6 +154,7 @@ module Anblog
     # Get all posts in ascending alphanumeric order of path
     # @param [Hash] opts the optional parameters
     # @option opts [String] :prefix A path prefix used to filter returned posts
+    # @option opts [Array<String>] :fields The comma-separated list of fields to be returned in the response
     # @return [Array<(Array<Post>, Integer, Hash)>] Array<Post> data, response status code and response headers
     def get_all_posts_with_http_info(opts = {})
       if @api_client.config.debugging
@@ -164,6 +166,7 @@ module Anblog
       # query parameters
       query_params = opts[:query_params] || {}
       query_params[:'prefix'] = opts[:'prefix'] if !opts[:'prefix'].nil?
+      query_params[:'$fields'] = @api_client.build_collection_param(opts[:'fields'], :multi) if !opts[:'fields'].nil?
 
       # header parameters
       header_params = opts[:header_params] || {}
@@ -202,6 +205,7 @@ module Anblog
     # Returns a single post
     # @param post_path [String] The path of the post to return
     # @param [Hash] opts the optional parameters
+    # @option opts [Array<String>] :fields The comma-separated list of fields to be returned in the response
     # @return [Post]
     def get_post_by_path(post_path, opts = {})
       data, _status_code, _headers = get_post_by_path_with_http_info(post_path, opts)
@@ -212,6 +216,7 @@ module Anblog
     # Returns a single post
     # @param post_path [String] The path of the post to return
     # @param [Hash] opts the optional parameters
+    # @option opts [Array<String>] :fields The comma-separated list of fields to be returned in the response
     # @return [Array<(Post, Integer, Hash)>] Post data, response status code and response headers
     def get_post_by_path_with_http_info(post_path, opts = {})
       if @api_client.config.debugging
@@ -226,6 +231,7 @@ module Anblog
 
       # query parameters
       query_params = opts[:query_params] || {}
+      query_params[:'$fields'] = @api_client.build_collection_param(opts[:'fields'], :multi) if !opts[:'fields'].nil?
 
       # header parameters
       header_params = opts[:header_params] || {}

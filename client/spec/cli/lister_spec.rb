@@ -18,6 +18,7 @@ describe Anblog::CLI::Lister do
     context 'when the root path is passed' do
       it 'returns all paths' do
         expect(post_api_client).to receive(:get_all_posts)
+                                     .with(:prefix => '.', :fields => 'path')
                                      .and_return(expected_posts)
 
         actual_posts = lister.list '.'
@@ -29,7 +30,7 @@ describe Anblog::CLI::Lister do
       it 'returns all paths under that path' do
         expected_filtered_posts = expected_posts.select { |p| p.path.start_with? '.dir1a' }
         expect(post_api_client).to receive(:get_all_posts)
-                                     .with(:prefix => '.dir1a')
+                                     .with(:prefix => '.dir1a', :fields => 'path')
                                      .and_return(expected_filtered_posts)
 
         actual_posts = lister.list '.dir1a'

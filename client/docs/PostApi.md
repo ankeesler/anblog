@@ -134,7 +134,8 @@ end
 
 api_instance = Anblog::PostApi.new
 opts = {
-  prefix: 'prefix_example' # String | A path prefix used to filter returned posts
+  prefix: 'prefix_example', # String | A path prefix used to filter returned posts
+  fields: ['fields_example'] # Array<String> | The comma-separated list of fields to be returned in the response
 }
 
 begin
@@ -152,6 +153,7 @@ end
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **prefix** | **String**| A path prefix used to filter returned posts | [optional] 
+ **fields** | [**Array&lt;String&gt;**](String.md)| The comma-separated list of fields to be returned in the response | [optional] 
 
 ### Return type
 
@@ -169,7 +171,7 @@ Name | Type | Description  | Notes
 
 ## get_post_by_path
 
-> Post get_post_by_path(post_path)
+> Post get_post_by_path(post_path, opts)
 
 Get post by path
 
@@ -189,10 +191,13 @@ end
 
 api_instance = Anblog::PostApi.new
 post_path = 'post_path_example' # String | The path of the post to return
+opts = {
+  fields: ['fields_example'] # Array<String> | The comma-separated list of fields to be returned in the response
+}
 
 begin
   #Get post by path
-  result = api_instance.get_post_by_path(post_path)
+  result = api_instance.get_post_by_path(post_path, opts)
   p result
 rescue Anblog::ApiError => e
   puts "Exception when calling PostApi->get_post_by_path: #{e}"
@@ -205,6 +210,7 @@ end
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **post_path** | **String**| The path of the post to return | 
+ **fields** | [**Array&lt;String&gt;**](String.md)| The comma-separated list of fields to be returned in the response | [optional] 
 
 ### Return type
 

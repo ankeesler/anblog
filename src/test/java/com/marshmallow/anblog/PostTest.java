@@ -16,8 +16,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import javax.transaction.Transactional;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -72,26 +74,23 @@ public class PostTest {
                         .created(1L)
                         .modified(2L)
                         .putLabelsItem("tuna", "fish")
-                        .putLabelsItem("marlin", "shark"),
-                new Post()
-                        .path(".some.path.2")
-                        .content("some content\n\non multiple lines\n\nfor post 2")
-                        .created(3L)
-                        .modified(4L)
-                        .putLabelsItem("treason", "doughnut"),
-                new Post()
-                        .path(".some.path.3")
-                        .content("some content\n\non multiple lines\n\nfor post 3")
-                        .created(5L)
-                        .modified(6L),
+                        .putLabelsItem("marlin", "shark")
         };
         for (final Post post : posts) {
             assertEquals(post, postFromJson(post("/posts", postToJson(post))));
         }
 
-        System.out.println("andrew: " + get("/posts?$fields=path"));
-        for (final Post post : posts) {
-            System.out.println("andrew: " + get(String.format("/posts/%s?$fields=path", post.getPath())));
+        final Post[] partialPosts = postsFromJson(get("/posts?$fields=path,created,modified,labels"));
+        for (final Post partialPost : partialPosts) {
+            assertEquals(".some.path.1", partialPost.getPath());
+            assertNull(partialPost.getContent());
+            assertEquals(Long.valueOf(1L), partialPost.getCreated());
+            assertEquals(Long.valueOf(2L), partialPost.getModified());
+
+            final Map<String, String> labels = new HashMap<>();
+            labels.put("tuna", "fish");
+            labels.put("marlin", "shark");
+            assertEquals(labels, partialPost.getLabels());
         }
     }
 

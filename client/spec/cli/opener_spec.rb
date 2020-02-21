@@ -16,6 +16,7 @@ describe Anblog::CLI::Opener do
     expected_post.content = "some content\n\non multiple lines\n  with spaces"
     expected_post.created = 1
     expected_post.modified = 2
+    expected_post.labels = {}
     expected_post
   }
 
@@ -39,6 +40,7 @@ describe Anblog::CLI::Opener do
 # path:     .some.path
 # created:  1969-12-31 19:00:01
 # modified: 1969-12-31 19:00:01
+# labels:   
 #
 # lines starting with '#' will be ignored
 # empty messages will not be saved
@@ -71,6 +73,7 @@ describe Anblog::CLI::Opener do
 # path:     .some.path
 # created:  1969-12-31 19:00:01
 # modified: 1969-12-31 19:00:01
+# labels:   
 #
 # lines starting with '#' will be ignored
 # empty messages will not be saved
@@ -89,6 +92,8 @@ describe Anblog::CLI::Opener do
     context 'the post exists' do
       context 'when the user does not update any uncommented lines' do
         it 'edits the file and does not update the post' do
+          expected_post.labels = { 'tuna' => 'fish', 'marlin' => 'shark' }
+
           expect(post_api_client).to receive(:get_post_by_path)
                                       .with('.some.path')
                                       .and_return(expected_post)
@@ -98,6 +103,9 @@ describe Anblog::CLI::Opener do
 # path:     .some.path
 # created:  1969-12-31 19:00:01
 # modified: 1969-12-31 19:00:02
+# labels:   
+#   tuna: fish
+#   marlin: shark
 #
 # lines starting with '#' will be ignored
 # empty messages will not be saved
@@ -113,6 +121,9 @@ on multiple lines
 # path:     .some.path
 # created:  1969-12-31 19:00:01
 # modified: 1969-12-31 19:00:02
+# labels:   
+#   tuna: fish
+#   marlin: shark
 #
 # lines starting with '#' will be ignored
 # empty messages will not be saved
@@ -130,6 +141,8 @@ on multiple lines
 
       context 'the user enters uncommented lines' do
         it 'edits the file and updates the post' do
+          expected_post.labels = { 'tuna' => 'fish', 'marlin' => 'shark' }
+
           expected_new_post = Marshal.load(Marshal.dump(expected_post))
           expected_new_post.modified = 3
           expected_new_post.content << "\nsome content\n\non multiple lines\n  with spaces"
@@ -147,6 +160,9 @@ on multiple lines
 # path:     .some.path
 # created:  1969-12-31 19:00:01
 # modified: 1969-12-31 19:00:02
+# labels:   
+#   tuna: fish
+#   marlin: shark
 #
 # lines starting with '#' will be ignored
 # empty messages will not be saved

@@ -74,7 +74,8 @@ public class PostService implements PostsApiDelegate {
             .path(entity.getPath())
             .content(entity.getContent())
             .created(entity.getCreated())
-            .modified(entity.getModified());
+            .modified(entity.getModified())
+            .labels(entity.getLabels());
   }
 
   private static PostEntity postToEntity(final Post post) {
@@ -83,6 +84,7 @@ public class PostService implements PostsApiDelegate {
     entity.setContent(post.getContent());
     entity.setCreated(post.getCreated());
     entity.setModified(post.getModified());
+    entity.setLabels(post.getLabels());
     return entity;
   }
 }

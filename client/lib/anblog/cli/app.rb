@@ -6,6 +6,7 @@ require 'anblog/cli/catter'
 require 'anblog/cli/editor'
 require 'anblog/cli/filewatcher'
 require 'anblog/cli/help_command'
+require 'anblog/cli/label_command'
 require 'anblog/cli/lister'
 require 'anblog/cli/list_command'
 require 'anblog/cli/opener'
@@ -38,6 +39,8 @@ module Anblog
           c.debugging = debug
           c.username = username
           c.password = password
+          c.host = ENV['ANBLOG_HOST'] || 'anblog.cfapps.io'
+          c.scheme = ENV['ANBLOG_SCHEME'] || 'https'
         end
         api_client = Anblog::ApiClient.new configuration
         post_api_client = Anblog::PostApi.new api_client
@@ -53,6 +56,7 @@ module Anblog
         s = Runner.new([
           CatCommand.new(catter),
           HelpCommand.new,
+          LabelCommand.new(post_api_client),
           ListCommand.new(lister),
           OpenCommand.new(opener),
                        ]).run args

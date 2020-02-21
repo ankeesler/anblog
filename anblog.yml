@@ -159,6 +159,7 @@ components:
       - content
       - created
       - modified
+      - labels
       properties:
         path:
           description: Unique path
@@ -176,6 +177,11 @@ components:
           description: Seconds since 1970
           type: integer
           format: int64
+        labels:
+          description: Key/value pairs for metadata
+          type: object
+          additionalProperties:
+            type: string
   securitySchemes:
     blog_auth:
       type: http

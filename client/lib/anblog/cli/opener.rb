@@ -20,7 +20,7 @@ module Anblog
 
         if post == nil
           now = @timer.now
-          post = Post.new :path => path, :created => now, :modified => now
+          post = Post.new :path => path, :created => now, :modified => now, :labels => {}
         end
 
         h = make_file_header post
@@ -65,10 +65,12 @@ module Anblog
         def make_file_header(post)
           created = Time.at(post.created).strftime "%F %T"
           modified = Time.at(post.modified).strftime "%F %T"
+          labels = format_labels post.labels
           %(#
   # path:     #{post.path}
   # created:  #{created}
   # modified: #{modified}
+  # labels:   #{labels}
   #
   # lines starting with '#' will be ignored
   # empty messages will not be saved
@@ -89,6 +91,14 @@ module Anblog
           else
             content.join("\n")
           end
+        end
+
+        def format_labels(labels)
+          s = ''
+          labels.each do |k, v|
+            s << "\n  #   #{k}: #{v}"
+          end
+          s
         end
     end
   end

@@ -26,13 +26,17 @@ module Anblog
     # Seconds since 1970
     attr_accessor :modified
 
+    # Key/value pairs for metadata
+    attr_accessor :labels
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'path' => :'path',
         :'content' => :'content',
         :'created' => :'created',
-        :'modified' => :'modified'
+        :'modified' => :'modified',
+        :'labels' => :'labels'
       }
     end
 
@@ -42,7 +46,8 @@ module Anblog
         :'path' => :'String',
         :'content' => :'String',
         :'created' => :'Integer',
-        :'modified' => :'Integer'
+        :'modified' => :'Integer',
+        :'labels' => :'Hash<String, String>'
       }
     end
 
@@ -76,6 +81,12 @@ module Anblog
       if attributes.key?(:'modified')
         self.modified = attributes[:'modified']
       end
+
+      if attributes.key?(:'labels')
+        if (value = attributes[:'labels']).is_a?(Hash)
+          self.labels = value
+        end
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -107,6 +118,10 @@ module Anblog
         invalid_properties.push('invalid value for "modified", modified cannot be nil.')
       end
 
+      if @labels.nil?
+        invalid_properties.push('invalid value for "labels", labels cannot be nil.')
+      end
+
       invalid_properties
     end
 
@@ -119,6 +134,7 @@ module Anblog
       return false if @content.nil?
       return false if @created.nil?
       return false if @modified.nil?
+      return false if @labels.nil?
       true
     end
 
@@ -149,7 +165,8 @@ module Anblog
           path == o.path &&
           content == o.content &&
           created == o.created &&
-          modified == o.modified
+          modified == o.modified &&
+          labels == o.labels
     end
 
     # @see the `==` method
@@ -161,7 +178,7 @@ module Anblog
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [path, content, created, modified].hash
+      [path, content, created, modified, labels].hash
     end
 
     # Builds the object from hash

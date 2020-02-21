@@ -12,6 +12,7 @@ require 'anblog/cli/list_command'
 require 'anblog/cli/opener'
 require 'anblog/cli/open_command'
 require 'anblog/cli/runner'
+require 'anblog/cli/stat_command'
 require 'anblog/cli/timer'
 
 module Anblog
@@ -59,6 +60,7 @@ module Anblog
           LabelCommand.new(post_api_client),
           ListCommand.new(lister),
           OpenCommand.new(opener),
+          StatCommand.new(post_api_client),
                        ]).run args
         if s.length > 0
           puts s

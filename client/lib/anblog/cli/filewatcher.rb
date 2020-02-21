@@ -6,7 +6,7 @@ module Anblog
       def start(file, &block)
         @fw = ::Filewatcher.new [file]
         @thread = Thread.new {
-          @fw.watch block
+          @fw.watch &block
         }
       end
 

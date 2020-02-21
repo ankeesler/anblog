@@ -4,6 +4,7 @@ require 'anblog'
 require 'anblog/cli/cat_command'
 require 'anblog/cli/catter'
 require 'anblog/cli/editor'
+require 'anblog/cli/filewatcher'
 require 'anblog/cli/help_command'
 require 'anblog/cli/lister'
 require 'anblog/cli/list_command'
@@ -41,12 +42,13 @@ module Anblog
         api_client = Anblog::ApiClient.new configuration
         post_api_client = Anblog::PostApi.new api_client
         editor = Editor.new ENV['EDITOR'] || "emacs"
+        filewatcher = Filewatcher.new
         timer = Timer.new
         tmp_path = Dir.tmpdir
 
         catter = Catter.new(post_api_client)
         lister = Lister.new(post_api_client)
-        opener = Opener.new(post_api_client, editor, timer, tmp_path)
+        opener = Opener.new(post_api_client, editor, timer, filewatcher, tmp_path)
 
         s = Runner.new([
           CatCommand.new(catter),

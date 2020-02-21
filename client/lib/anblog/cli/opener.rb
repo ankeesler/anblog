@@ -1,27 +1,26 @@
 module Anblog
   module CLI
     class Opener
-      def initialize(post_api_client, editor, timer, tmp_path)
+      def initialize(post_api_client, editor, timer, filewatcher, tmp_path)
         @post_api_client = post_api_client
         @editor = editor
         @timer = timer
+        @filewatcher = filewatcher
         @tmp_path = tmp_path
       end
 
       def open(path)
-        now = @timer.now
-
         begin
-          data = @post_api_client.get_post_by_path(path)
+          post = @post_api_client.get_post_by_path(path)
         rescue ApiError => ae
-          status_code = ae.code
+          if ae.code != 404
+            "error: #{ae}"
+          end
         end
 
-        post = data
-        new_post = false
         if post == nil
+          now = @timer.now
           post = Post.new :path => path, :created => now, :modified => now
-          new_post = true
         end
 
         h = make_file_header post
@@ -31,21 +30,37 @@ module Anblog
           f << h
           f << post.content
         end
-        @editor.edit file
 
-        content = strip_file_comments File.read(file)
-        unless content == nil
-          post.content = content
-          post.modified = now
-          if new_post
-            @post_api_client.add_post post
+        @filewatcher.start(file) do |f, e|
+          case e
+          when :updated
+            add_or_update_api(post, file)
           else
-            @post_api_client.update_post path, post
+            raise "unexpected file event #{e} for file #{f}"
           end
         end
+        @editor.edit file
+        @filewatcher.stop
+
+        add_or_update_api(post, file)
       end
 
       private
+
+        def add_or_update_api(post, file)
+          content = strip_file_comments File.read(file)
+          unless content == nil
+            new_post = post.created == post.modified
+            now = @timer.now
+            post.content = content
+            post.modified = now
+            if new_post
+              @post_api_client.add_post post
+            else
+              @post_api_client.update_post post.path, post
+            end
+          end
+        end
 
         def make_file_header(post)
           created = Time.at(post.created).strftime "%F %T"
@@ -68,7 +83,7 @@ module Anblog
               content << line.rstrip
             end
           end
-
+  
           if content.reject { |c| c.empty? }.length == 0
             nil
           else

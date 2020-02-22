@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PostService implements PostsApiDelegate {
@@ -41,8 +38,16 @@ public class PostService implements PostsApiDelegate {
   public ResponseEntity<Post> deletePost(final String path) {
     final Optional<PostEntity> entity = postRepository.findById(path);
     if (entity.isPresent()) {
+      final Post post = entityToPost(entity.get(), null);
+      // I think we need to create a copy of this map since the map that we
+      // get from the entity is lazily created, and if we try to create it
+      // after the call to deleteById() below, then bad things happen.
+      post.labels(new HashMap<>(post.getLabels()));
+      final ResponseEntity<Post> response = new ResponseEntity<>(post, HttpStatus.OK);
+
       postRepository.deleteById(path);
-      return new ResponseEntity<>(entityToPost(entity.get(), null), HttpStatus.OK);
+
+      return response;
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

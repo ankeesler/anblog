@@ -33,6 +33,7 @@ module Anblog
               return "error: #{ae}"
             end
           end
+          ''
         end
     end
   end

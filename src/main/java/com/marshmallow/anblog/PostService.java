@@ -1,5 +1,6 @@
 package com.marshmallow.anblog;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.openapitools.api.PostsApiDelegate;
 import org.openapitools.model.Post;
@@ -82,33 +83,20 @@ public class PostService implements PostsApiDelegate {
   }
 
   @Override
-  public ResponseEntity<Post> patchPost(final String path, final String post) {
+  public ResponseEntity<Post> patchPost(final String path, final Post post) {
     final Optional<PostEntity> entity = postRepository.findById(path);
     if (entity.isPresent()) {
-      final ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+      final ObjectMapper mapper = new ObjectMapper()
+              .setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL)
+              .findAndRegisterModules();
       final JsonValue target = mapper.convertValue(entity.get(), JsonValue.class);
-
-      JsonMergePatch patch;
-      try {
-        patch = makeMergePatch(post);
-      } catch (Exception e) {
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-      }
-
+      final JsonMergePatch patch = Json.createMergePatch(mapper.convertValue(post, JsonValue.class));
       final JsonValue patched = patch.apply(target);
       final Post patchedPost = mapper.convertValue(patched, Post.class);
       postRepository.save(postToEntity(patchedPost));
       return new ResponseEntity<>(patchedPost, HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-  }
-
-  private static JsonMergePatch makeMergePatch(final String patch) throws Exception {
-    try (JsonReader reader = Json.createReader(new ByteArrayInputStream(patch.getBytes()))) {
-      return Json.createMergePatch(reader.readValue());
-    } catch (Exception e) {
-      throw new Exception();
     }
   }
 

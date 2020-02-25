@@ -149,7 +149,7 @@ paths:
         content:
           application/merge-patch+json:
             schema:
-              type: string
+              $ref: '#/components/schemas/Post'
         required: true
       parameters:
         - name: postPath

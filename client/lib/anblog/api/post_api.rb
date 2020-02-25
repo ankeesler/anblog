@@ -268,20 +268,20 @@ module Anblog
 
     # Patch an existing post
     # @param post_path [String] The path of the post to return
-    # @param body [String] Partial post object to merge into existing post
+    # @param post [Post] Partial post object to merge into existing post
     # @param [Hash] opts the optional parameters
     # @return [Post]
-    def patch_post(post_path, body, opts = {})
-      data, _status_code, _headers = patch_post_with_http_info(post_path, body, opts)
+    def patch_post(post_path, post, opts = {})
+      data, _status_code, _headers = patch_post_with_http_info(post_path, post, opts)
       data
     end
 
     # Patch an existing post
     # @param post_path [String] The path of the post to return
-    # @param body [String] Partial post object to merge into existing post
+    # @param post [Post] Partial post object to merge into existing post
     # @param [Hash] opts the optional parameters
     # @return [Array<(Post, Integer, Hash)>] Post data, response status code and response headers
-    def patch_post_with_http_info(post_path, body, opts = {})
+    def patch_post_with_http_info(post_path, post, opts = {})
       if @api_client.config.debugging
         @api_client.config.logger.debug 'Calling API: PostApi.patch_post ...'
       end
@@ -289,9 +289,9 @@ module Anblog
       if @api_client.config.client_side_validation && post_path.nil?
         fail ArgumentError, "Missing the required parameter 'post_path' when calling PostApi.patch_post"
       end
-      # verify the required parameter 'body' is set
-      if @api_client.config.client_side_validation && body.nil?
-        fail ArgumentError, "Missing the required parameter 'body' when calling PostApi.patch_post"
+      # verify the required parameter 'post' is set
+      if @api_client.config.client_side_validation && post.nil?
+        fail ArgumentError, "Missing the required parameter 'post' when calling PostApi.patch_post"
       end
       # resource path
       local_var_path = '/posts/{postPath}'.sub('{' + 'postPath' + '}', post_path.to_s)
@@ -310,7 +310,7 @@ module Anblog
       form_params = opts[:form_params] || {}
 
       # http body (model)
-      post_body = opts[:body] || @api_client.object_to_http_body(body) 
+      post_body = opts[:body] || @api_client.object_to_http_body(post) 
 
       # return_type
       return_type = opts[:return_type] || 'Post' 

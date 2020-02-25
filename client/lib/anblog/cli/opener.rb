@@ -52,12 +52,14 @@ module Anblog
           unless content == nil
             new_post = post.created == post.modified
             now = @timer.now
-            post.content = content
-            post.modified = now
             if new_post
+              post.content = content
+              post.modified = now
               @post_api_client.add_post post
             else
-              @post_api_client.update_post post.path, post
+              path = post.path
+              post = Post.new :content => content, :modified => now
+              @post_api_client.patch_post path, post
             end
           end
         end

@@ -229,7 +229,7 @@ Name | Type | Description  | Notes
 
 ## patch_post
 
-> Post patch_post(post_path, body)
+> Post patch_post(post_path, post)
 
 Patch an existing post
 
@@ -247,11 +247,11 @@ end
 
 api_instance = Anblog::PostApi.new
 post_path = 'post_path_example' # String | The path of the post to return
-body = 'body_example' # String | Partial post object to merge into existing post
+post = Anblog::Post.new # Post | Partial post object to merge into existing post
 
 begin
   #Patch an existing post
-  result = api_instance.patch_post(post_path, body)
+  result = api_instance.patch_post(post_path, post)
   p result
 rescue Anblog::ApiError => e
   puts "Exception when calling PostApi->patch_post: #{e}"
@@ -264,7 +264,7 @@ end
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **post_path** | **String**| The path of the post to return | 
- **body** | **String**| Partial post object to merge into existing post | 
+ **post** | [**Post**](Post.md)| Partial post object to merge into existing post | 
 
 ### Return type
 

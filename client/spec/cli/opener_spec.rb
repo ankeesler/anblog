@@ -143,17 +143,17 @@ on multiple lines
         it 'edits the file and updates the post' do
           expected_post.labels = { 'tuna' => 'fish', 'marlin' => 'shark' }
 
-          expected_new_post = Marshal.load(Marshal.dump(expected_post))
-          expected_new_post.modified = 3
+          expected_new_post = Anblog::Post.new
+          expected_new_post.content = "some content\n\non multiple lines\n  with spaces"
           expected_new_post.content << "\nsome content\n\non multiple lines\n  with spaces"
+          expected_new_post.modified = 3
 
           expect(timer).to receive(:now).and_return(3)
           expect(post_api_client).to receive(:get_post_by_path)
                                       .with('.some.path')
                                       .and_return(expected_post)
-          expect(post_api_client).to receive(:update_post)
+          expect(post_api_client).to receive(:patch_post)
                                       .with('.some.path', expected_new_post)
-                                      .and_return(expected_new_post)
           expect(filewatcher).to receive(:start)
           expect(editor).to receive(:edit) do |file|
             expected_content = %(#

@@ -133,6 +133,26 @@ public class PostTest {
     }
 
     @Test
+    public void patchPost() throws Exception {
+        final Post post = new Post()
+                .path(".some.path")
+                .content("some content")
+                .created(1L)
+                .modified(2L)
+                .putLabelsItem("foo", "bar");
+        assertEquals(post, postFromJson(post("/posts", postToJson(post))));
+
+        final String partialPost = "{\"content\": \"some new content\", \"modified\": 3}";
+        final Post newPost = new Post()
+                .path(".some.path")
+                .content("some new content")
+                .created(1L)
+                .modified(3L)
+                .putLabelsItem("foo", "bar");
+        assertEquals(postToJson(newPost), patch("/posts/.some.path", partialPost));
+    }
+
+    @Test
     public void deletePost() throws Exception {
         final Post[] posts = new Post[]{
                 new Post()
@@ -214,6 +234,19 @@ public class PostTest {
         return mockMvc.perform(MockMvcRequestBuilders
                 .put(path)
                 .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .with(user("anblog_default_username").password("anblog_default_password"))
+                .content(content)
+        )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+    }
+
+    private String patch(final String path, final String content) throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders
+                .patch(path)
+                .contentType("application/merge-patch+json")
                 .accept(MediaType.APPLICATION_JSON)
                 .with(user("anblog_default_username").password("anblog_default_password"))
                 .content(content)

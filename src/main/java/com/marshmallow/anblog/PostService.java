@@ -1,5 +1,6 @@
 package com.marshmallow.anblog;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.openapitools.api.PostsApiDelegate;
 import org.openapitools.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.json.*;
+import javax.xml.ws.Response;
+import java.io.ByteArrayInputStream;
 import java.util.*;
 
 @Service
@@ -74,6 +78,37 @@ public class PostService implements PostsApiDelegate {
       return new ResponseEntity<>(post, HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @Override
+  public ResponseEntity<Post> patchPost(final String path, final String post) {
+    final Optional<PostEntity> entity = postRepository.findById(path);
+    if (entity.isPresent()) {
+      final ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+      final JsonValue target = mapper.convertValue(entity.get(), JsonValue.class);
+
+      JsonMergePatch patch;
+      try {
+        patch = makeMergePatch(post);
+      } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
+
+      final JsonValue patched = patch.apply(target);
+      final Post patchedPost = mapper.convertValue(patched, Post.class);
+      postRepository.save(postToEntity(patchedPost));
+      return new ResponseEntity<>(patchedPost, HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+  }
+
+  private static JsonMergePatch makeMergePatch(final String patch) throws Exception {
+    try (JsonReader reader = Json.createReader(new ByteArrayInputStream(patch.getBytes()))) {
+      return Json.createMergePatch(reader.readValue());
+    } catch (Exception e) {
+      throw new Exception();
     }
   }
 

@@ -266,6 +266,74 @@ module Anblog
       return data, status_code, headers
     end
 
+    # Patch an existing post
+    # @param post_path [String] The path of the post to return
+    # @param body [String] Partial post object to merge into existing post
+    # @param [Hash] opts the optional parameters
+    # @return [Post]
+    def patch_post(post_path, body, opts = {})
+      data, _status_code, _headers = patch_post_with_http_info(post_path, body, opts)
+      data
+    end
+
+    # Patch an existing post
+    # @param post_path [String] The path of the post to return
+    # @param body [String] Partial post object to merge into existing post
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(Post, Integer, Hash)>] Post data, response status code and response headers
+    def patch_post_with_http_info(post_path, body, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: PostApi.patch_post ...'
+      end
+      # verify the required parameter 'post_path' is set
+      if @api_client.config.client_side_validation && post_path.nil?
+        fail ArgumentError, "Missing the required parameter 'post_path' when calling PostApi.patch_post"
+      end
+      # verify the required parameter 'body' is set
+      if @api_client.config.client_side_validation && body.nil?
+        fail ArgumentError, "Missing the required parameter 'body' when calling PostApi.patch_post"
+      end
+      # resource path
+      local_var_path = '/posts/{postPath}'.sub('{' + 'postPath' + '}', post_path.to_s)
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
+      # HTTP header 'Content-Type'
+      header_params['Content-Type'] = @api_client.select_header_content_type(['application/merge-patch+json'])
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:body] || @api_client.object_to_http_body(body) 
+
+      # return_type
+      return_type = opts[:return_type] || 'Post' 
+
+      # auth_names
+      auth_names = opts[:auth_names] || ['blog_auth']
+
+      new_options = opts.merge(
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:PATCH, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: PostApi#patch_post\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Update an existing post
     # @param post_path [String] The path of the post to return
     # @param post [Post] Post object to update

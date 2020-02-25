@@ -139,6 +139,43 @@ paths:
           content: {}
       security:
       - blog_auth: []
+    patch:
+      tags:
+        - post
+      summary: Patch an existing post
+      operationId: patchPost
+      requestBody:
+        description: Partial post object to merge into existing post
+        content:
+          application/merge-patch+json:
+            schema:
+              type: string
+        required: true
+      parameters:
+        - name: postPath
+          in: path
+          description: The path of the post to return
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        400:
+          description: Invalid path supplied
+          content: {}
+        404:
+          description: Post not found
+          content: {}
+        405:
+          description: Validation exception
+          content: {}
+      security:
+        - blog_auth: []
     delete:
       tags:
       - post

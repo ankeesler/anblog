@@ -55,6 +55,10 @@ dependencies {
     implementation 'mysql:mysql-connector-java'
     implementation 'com.h2database:h2'
 
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr353:2.10.2'
+    implementation 'javax.json:javax.json-api:1.1.4'
+    implementation 'org.glassfish:javax.json:1.1.4'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 }

@@ -19,10 +19,12 @@ public class PostService implements PostsApiDelegate {
   public ResponseEntity<List<Post>> getAllPosts(final String prefix, final List<String> fields) {
     // TODO: we should only be getting the fields that we care about from the repository!
     final List<Post> posts = new ArrayList<Post>();
-    for (final PostEntity entity : postRepository.findAll()) {
-      if (prefix == null || entity.getPath().startsWith(prefix)) {
-        posts.add(entityToPost(entity, fields));
-      }
+    final Iterable<PostEntity> entities = (
+            prefix == null
+                    ? postRepository.findAll()
+                    : postRepository.findByPathPrefix(prefix));
+    for (final PostEntity entity : entities) {
+      posts.add(entityToPost(entity, fields));
     }
     posts.sort(Comparator.comparing(Post::getPath));
     return new ResponseEntity<>(posts, HttpStatus.OK);
@@ -42,7 +44,8 @@ public class PostService implements PostsApiDelegate {
       // I think we need to create a copy of this map since the map that we
       // get from the entity is lazily created, and if we try to create it
       // after the call to deleteById() below, then bad things happen.
-      post.labels(new HashMap<>(post.getLabels()));
+      final Map<String, String> labels = post.getLabels();
+      post.labels(labels == null ? new HashMap<>() : new HashMap<>(labels));
       final ResponseEntity<Post> response = new ResponseEntity<>(post, HttpStatus.OK);
 
       postRepository.deleteById(path);

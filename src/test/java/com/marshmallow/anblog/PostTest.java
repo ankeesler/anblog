@@ -139,17 +139,20 @@ public class PostTest {
                         .path(".some.path.1")
                         .content("some content\n\non multiple lines\n\nfor post 1")
                         .created(1L)
-                        .modified(2L),
+                        .modified(2L)
+                        .labels(new HashMap<>()),
                 new Post()
                         .path(".some.path.2")
                         .content("some content\n\non multiple lines\n\nfor post 2")
                         .created(3L)
-                        .modified(4L),
+                        .modified(4L)
+                        .labels(new HashMap<>()),
                 new Post()
                         .path(".some.path.3")
                         .content("some content\n\non multiple lines\n\nfor post 3")
                         .created(5L)
-                        .modified(6L),
+                        .modified(6L)
+                        .labels(new HashMap<>()),
         };
         for (final Post post : posts) {
             assertEquals(post, postFromJson(post("/posts", postToJson(post))));

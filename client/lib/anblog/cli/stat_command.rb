@@ -38,16 +38,16 @@ module Anblog
           modified = Time.at(post.modified).strftime "%F %T"
           labels = format_labels post.labels
           %(path:     #{post.path}
-  created:  #{created}
-  modified: #{modified}
-  labels:   #{labels}
-  ).gsub(/^\s+/, '')
+created:  #{created}
+modified: #{modified}
+labels:   #{labels}
+)
         end
 
         def format_labels(labels)
           s = ''
           labels.each do |k, v|
-            s << "\n    #{k}: #{v}"
+            s << "\n  #{k}: #{v}"
           end unless labels.nil?
           s
         end

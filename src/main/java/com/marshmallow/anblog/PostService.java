@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.json.*;
-import javax.xml.ws.Response;
-import java.io.ByteArrayInputStream;
 import java.util.*;
 
 @Service
@@ -27,7 +25,7 @@ public class PostService implements PostsApiDelegate {
     final Iterable<PostEntity> entities = (
             prefix == null
                     ? postRepository.findAll()
-                    : postRepository.findByPathPrefix(prefix));
+                    : postRepository.findByPathStartingWith(prefix));
     for (final PostEntity entity : entities) {
       posts.add(entityToPost(entity, fields));
     }

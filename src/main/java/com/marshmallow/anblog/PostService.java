@@ -22,10 +22,7 @@ public class PostService implements PostsApiDelegate {
   public ResponseEntity<List<Post>> getAllPosts(final String prefix, final List<String> fields) {
     // TODO: we should only be getting the fields that we care about from the repository!
     final List<Post> posts = new ArrayList<Post>();
-    final Iterable<PostEntity> entities = (
-            prefix == null
-                    ? postRepository.findAll()
-                    : postRepository.findByPathStartingWith(prefix));
+    final Iterable<PostEntity> entities = postRepository.findByPathStartingWith(prefix == null ? "." : prefix);
     for (final PostEntity entity : entities) {
       posts.add(entityToPost(entity, fields));
     }

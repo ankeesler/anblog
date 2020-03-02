@@ -26,4 +26,18 @@ describe Anblog::CLI::GrepCommand do
       expect(ac_s).to eq(ex_s)
     end
   end
+
+  context 'two arguments are passed' do
+    it 'calls the api with the regex argument and the prefix argument' do
+      expect(post_api_client).to receive(:get_all_posts)
+                                 .with(:fields => 'path,content', :content => '.*regex.*', :prefix => '.some.prefix')
+                                 .and_return(expected_posts)
+      ac_s = grep_command.action ['regex', '.some.prefix']
+      ex_s = %(.file1
+.dir1a.file2
+.dir1a.file2.file3
+.dir1b.dir2.file3).gsub(/^\s+/, '')
+      expect(ac_s).to eq(ex_s)
+    end
+  end
 end

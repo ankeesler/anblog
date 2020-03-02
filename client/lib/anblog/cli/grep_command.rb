@@ -17,20 +17,20 @@ module Anblog
         if args.length == 0
           "usage: anblog #{name} <content regex> [path prefix]"
         else
-          grep args[0], args.length < 3 ? '.' : args[1]
+          grep args[0], args.length < 2 ? '.' : args[1]
         end
       end
 
       private
 
-      def grep(regex, prefix)
-        begin
-          posts = @post_api_client.get_all_posts(:fields => 'path,content', :content => ".*#{regex}.*", :prefix => prefix)
-        rescue ApiError => ae
-          "error: #{ae}"
+        def grep(regex, prefix)
+          begin
+            posts = @post_api_client.get_all_posts(:fields => 'path,content', :content => ".*#{regex}.*", :prefix => prefix)
+          rescue ApiError => ae
+            "error: #{ae}"
+          end
+          posts.map { |p| p.path }.join("\n")
         end
-        posts.map { |p| p.path }.join("\n")
-      end
     end
   end
 end

@@ -5,6 +5,7 @@ require 'anblog/cli/cat_command'
 require 'anblog/cli/catter'
 require 'anblog/cli/editor'
 require 'anblog/cli/filewatcher'
+require 'anblog/cli/grep_command'
 require 'anblog/cli/help_command'
 require 'anblog/cli/label_command'
 require 'anblog/cli/lister'
@@ -57,6 +58,7 @@ module Anblog
 
         s = Runner.new([
           CatCommand.new(catter),
+          GrepCommand.new(post_api_client),
           HelpCommand.new,
           LabelCommand.new(post_api_client),
           ListCommand.new(lister),

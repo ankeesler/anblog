@@ -136,7 +136,8 @@ end
 api_instance = Anblog::PostApi.new
 opts = {
   prefix: 'prefix_example', # String | A path prefix used to filter returned posts
-  fields: ['fields_example'] # Array<String> | The comma-separated list of fields to be returned in the response
+  fields: ['fields_example'], # Array<String> | The comma-separated list of fields to be returned in the response
+  content: 'content_example' # String | A regex used to filter returned posts by their content
 }
 
 begin
@@ -155,6 +156,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **prefix** | **String**| A path prefix used to filter returned posts | [optional] 
  **fields** | [**Array&lt;String&gt;**](String.md)| The comma-separated list of fields to be returned in the response | [optional] 
+ **content** | **String**| A regex used to filter returned posts by their content | [optional] 
 
 ### Return type
 

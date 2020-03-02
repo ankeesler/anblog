@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import javax.json.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class PostService implements PostsApiDelegate {
@@ -19,12 +21,21 @@ public class PostService implements PostsApiDelegate {
   private PostRepository postRepository;
 
   @Override
-  public ResponseEntity<List<Post>> getAllPosts(final String prefix, final List<String> fields) {
+  public ResponseEntity<List<Post>> getAllPosts(final String prefix, final List<String> fields, final String content) {
     // TODO: we should only be getting the fields that we care about from the repository!
     final List<Post> posts = new ArrayList<Post>();
     final Iterable<PostEntity> entities = postRepository.findByPathStartingWith(prefix == null ? "." : prefix);
+
+    final Pattern pattern = content == null ? null : Pattern.compile(content, Pattern.DOTALL | Pattern.MULTILINE);
     for (final PostEntity entity : entities) {
-      posts.add(entityToPost(entity, fields));
+      if (pattern != null) {
+        final Matcher matcher = pattern.matcher(entity.getContent());
+        if (matcher.matches()) {
+          posts.add(entityToPost(entity, fields));
+        }
+      } else {
+        posts.add(entityToPost(entity, fields));
+      }
     }
     posts.sort(Comparator.comparing(Post::getPath));
     return new ResponseEntity<>(posts, HttpStatus.OK);

@@ -33,6 +33,12 @@ paths:
           type: array
           items:
             type: string
+      - name: content
+        in: query
+        description: A regex used to filter returned posts by their content
+        required: false
+        schema:
+          type: string
       responses:
         200:
           description: successful operation

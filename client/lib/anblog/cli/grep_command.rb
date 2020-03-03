@@ -29,7 +29,14 @@ module Anblog
           rescue ApiError => ae
             return "error: #{ae}"
           end
-          posts.map { |p| p.path }.join("\n")
+
+          s = ''
+          for post in posts
+            for line in post.content.lines.select { |l| l.match(regex) }
+              s << "#{post.path}: #{line.chomp}\n"
+            end
+          end
+          s
         end
     end
   end

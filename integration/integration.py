@@ -42,14 +42,14 @@ class TestIntegration(unittest.TestCase):
         cli.write(".some.other.path", "hello\n\nthis is a message 1\n")
         cli.write(".some.really.other.path", "hello\n\nthis is a message 2\n")
 
-        self.assertEqual(cli.grep("message", ""),
-                         ".some.other.path\n.some.path\n.some.really.other.path\n")
-        self.assertEqual(cli.grep("message", "."),
-                         ".some.other.path\n.some.path\n.some.really.other.path\n")
-        self.assertEqual(cli.grep("message", ".some.path"),
-                         ".some.path\n")
-        self.assertEqual(cli.grep("[12]", ""),
-                         ".some.other.path\n.some.really.other.path\n")
+        self.assertRegex(cli.grep("message", ""),
+                         ".some.other.path:.*\n.some.path:.*\n.some.really.other.path:.*\n")
+        self.assertRegex(cli.grep("message", "."),
+                         ".some.other.path:.*\n.some.path:.*\n.some.really.other.path:.*\n")
+        self.assertRegex(cli.grep("message", ".some.path"),
+                         ".some.path:.*\n")
+        self.assertRegex(cli.grep("[12]", ""),
+                         ".some.other.path:.*\n.some.really.other.path:.*\n")
 
 class Cli:
     def __init__(self, directory, scheme, host, debug, username, password):

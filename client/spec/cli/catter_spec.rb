@@ -20,7 +20,7 @@ describe Anblog::CLI::Catter do
                                                  :code => 404,
         ))
 
-        expect(catter.cat '.some.path').to eq('error: unknown post for path .some.path')
+        expect(catter.cat '.some.path').to eq('error: unknown post with path .some.path')
       end
     end
 

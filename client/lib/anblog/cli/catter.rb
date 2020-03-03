@@ -9,11 +9,14 @@ module Anblog
         begin
           post = @post_api_client.get_post_by_path(path, :fields => 'content')
         rescue ApiError => ae
-          status_code = ae.code
+          if ae.code == 404
+            return "error: unknown post with path #{path}"
+          else
+            return "error: #{ae}"
+          end
         end
 
         if post == nil
-          "error: unknown post for path #{path}"
         else
           post.content
         end

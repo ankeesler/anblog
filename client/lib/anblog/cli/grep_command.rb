@@ -27,7 +27,7 @@ module Anblog
           begin
             posts = @post_api_client.get_all_posts(:fields => 'path,content', :content => ".*#{regex}.*", :prefix => prefix)
           rescue ApiError => ae
-            "error: #{ae}"
+            return "error: #{ae}"
           end
           posts.map { |p| p.path }.join("\n")
         end

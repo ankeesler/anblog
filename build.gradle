@@ -59,6 +59,8 @@ dependencies {
     implementation 'javax.json:javax.json-api:1.1.4'
     implementation 'org.glassfish:javax.json:1.1.4'
 
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 }
@@ -113,3 +115,9 @@ task testClient(type: Exec) {
 }
 
 test.dependsOn testClient
+
+task testIntegration(type: Exec) {
+  commandLine 'script/integration_test.sh'
+}
+
+test.dependsOn testIntegration

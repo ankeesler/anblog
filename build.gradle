@@ -106,7 +106,7 @@ sourceSets.main.resources.srcDir buildJavaServer.outputDir.get() + "/src/main/re
 
 bootRun { systemProperties = System.properties }
 
-task cfPush(type: Exec, dependsOn: [test, bootJar]) {
+task deploy(type: Exec, dependsOn: [testAll, bootJar]) {
     commandLine 'cf', 'push'
 }
 

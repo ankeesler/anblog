@@ -23,6 +23,9 @@ plugins {
 
     // Apply the application plugin to add support for building an application
     id 'application'
+
+    // Display git properties in info endpoint
+    id "com.gorylenko.gradle-git-properties" version "1.5.1"
 }
 
 apply plugin: 'org.openapi.generator'
@@ -58,8 +61,6 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr353:2.10.2'
     implementation 'javax.json:javax.json-api:1.1.4'
     implementation 'org.glassfish:javax.json:1.1.4'
-
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -114,10 +115,8 @@ task testClient(type: Exec) {
     workingDir 'client'
 }
 
-test.dependsOn testClient
-
 task testIntegration(type: Exec) {
   commandLine 'script/integration_test.sh'
 }
 
-test.dependsOn testIntegration
+task testAll(dependsOn: ["test", "testClient", "testIntegration"])

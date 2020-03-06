@@ -2,35 +2,49 @@ package com.marshmallow.anblog;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+import javax.json.Json;
+import javax.json.JsonMergePatch;
+import javax.json.JsonValue;
 import org.openapitools.api.PostsApiDelegate;
 import org.openapitools.model.Post;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.json.*;
-import java.util.*;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 @Service
+@ComponentScan
 public class PostService implements PostsApiDelegate {
-
+  
   @Autowired
   private PostRepository postRepository;
-
+  
   @Override
-  public ResponseEntity<List<Post>> getAllPosts(final String prefix, final List<String> fields, final String content, final List<String> labels) {
+  public ResponseEntity<List<Post>> getAllPosts(
+          final String prefix, final List<String> fields,
+          final String content, final List<String> labels) {
     // TODO: we should only be getting the fields that we care about from the repository!
-    final Pattern pattern = content == null ? null : Pattern.compile(content, Pattern.DOTALL | Pattern.MULTILINE);
-
+    final Pattern pattern = content == null
+            ? null
+            : Pattern.compile(content, Pattern.DOTALL | Pattern.MULTILINE);
+    
     final List<LabelFilter> labelFilters = makeLabelFilters(labels);
-
-    final Iterable<PostEntity> entities = postRepository.findByPathStartingWith(prefix == null ? "." : prefix);
+    
+    final Iterable<PostEntity> entities
+            = postRepository.findByPathStartingWith(prefix == null ? "." : prefix);
     final List<Post> posts = StreamSupport.stream(entities.spliterator(), true
     ).filter(
             e -> pattern == null || pattern.matcher(e.getContent()).matches()
@@ -45,13 +59,13 @@ public class PostService implements PostsApiDelegate {
     );
     return new ResponseEntity<>(posts, HttpStatus.OK);
   }
-
+  
   @Override
   public ResponseEntity<Post> addPost(final Post post) {
     postRepository.save(postToEntity(post));
     return new ResponseEntity<>(post, HttpStatus.OK);
   }
-
+  
   @Override
   public ResponseEntity<Post> deletePost(final String path) {
     final Optional<PostEntity> entity = postRepository.findById(path);
@@ -63,15 +77,15 @@ public class PostService implements PostsApiDelegate {
       final Map<String, String> labels = post.getLabels();
       post.labels(labels == null ? new HashMap<>() : new HashMap<>(labels));
       final ResponseEntity<Post> response = new ResponseEntity<>(post, HttpStatus.OK);
-
+      
       postRepository.deleteById(path);
-
+      
       return response;
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
-
+  
   @Override
   public ResponseEntity<Post> getPostByPath(final String path, final List<String> fields) {
     final Optional<PostEntity> entity = postRepository.findById(path);
@@ -81,7 +95,7 @@ public class PostService implements PostsApiDelegate {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
-
+  
   @Override
   public ResponseEntity<Post> updatePost(final String path, final Post post) {
     final Optional<PostEntity> entity = postRepository.findById(path);
@@ -92,7 +106,7 @@ public class PostService implements PostsApiDelegate {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
-
+  
   @Override
   public ResponseEntity<Post> patchPost(final String path, final Post post) {
     final Optional<PostEntity> entity = postRepository.findById(path);
@@ -101,7 +115,8 @@ public class PostService implements PostsApiDelegate {
               .setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL)
               .findAndRegisterModules();
       final JsonValue target = mapper.convertValue(entity.get(), JsonValue.class);
-      final JsonMergePatch patch = Json.createMergePatch(mapper.convertValue(post, JsonValue.class));
+      final JsonMergePatch patch
+              = Json.createMergePatch(mapper.convertValue(post, JsonValue.class));
       final JsonValue patched = patch.apply(target);
       final Post patchedPost = mapper.convertValue(patched, Post.class);
       postRepository.save(postToEntity(patchedPost));
@@ -110,22 +125,27 @@ public class PostService implements PostsApiDelegate {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
-
+  
   private static Post entityToPost(final PostEntity entity, final List<String> fields) {
     final Post post = new Post();
-    if (fields == null || fields.contains("path"))
+    if (fields == null || fields.contains("path")) {
       post.path(entity.getPath());
-    if (fields == null || fields.contains("content"))
+    }
+    if (fields == null || fields.contains("content")) {
       post.content(entity.getContent());
-    if (fields == null || fields.contains("created"))
+    }
+    if (fields == null || fields.contains("created")) {
       post.created(entity.getCreated());
-    if (fields == null || fields.contains("modified"))
+    }
+    if (fields == null || fields.contains("modified")) {
       post.modified(entity.getModified());
-    if (fields == null || fields.contains("labels"))
+    }
+    if (fields == null || fields.contains("labels")) {
       post.labels(entity.getLabels());
+    }
     return post;
   }
-
+  
   private static PostEntity postToEntity(final Post post) {
     final PostEntity entity = new PostEntity();
     entity.setPath(post.getPath());
@@ -135,12 +155,12 @@ public class PostService implements PostsApiDelegate {
     entity.setLabels(post.getLabels());
     return entity;
   }
-
+  
   private static List<LabelFilter> makeLabelFilters(final List<String> labels) {
     if (labels == null) {
       return Collections.emptyList();
     }
-
+    
     final List<LabelFilter> labelFilters = new ArrayList<>(labels.size());
     for (final String filter : labels) {
       try {

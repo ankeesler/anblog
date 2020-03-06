@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class AuthConfig extends WebSecurityConfigurerAdapter {
-
+  
   @Override
   public void configure(final HttpSecurity http) throws Exception {
     http
@@ -23,22 +23,26 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests().anyRequest().authenticated().and()
             .httpBasic();
   }
-
+  
   @Autowired
   public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
     String userId = System.getenv("ANBLOG_USERNAME");
     if (userId == null) {
       userId = "anblog_default_username";
     }
-
+    
     String userPassword = System.getenv("ANBLOG_PASSWORD");
     if (userPassword == null) {
       userPassword = "anblog_default_password";
     }
-
-    auth.inMemoryAuthentication().withUser(userId).password(passwordEncoder().encode(userPassword)).authorities("ADMIN");
+    
+    auth
+            .inMemoryAuthentication()
+            .withUser(userId)
+            .password(passwordEncoder().encode(userPassword))
+            .authorities("ADMIN");
   }
-
+  
   @Bean
   public PasswordEncoder passwordEncoder() {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();

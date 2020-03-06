@@ -6,7 +6,7 @@ module Anblog
       end
 
       def name
-        'list'
+        'ls'
       end
 
       def description

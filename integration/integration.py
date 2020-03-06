@@ -25,16 +25,16 @@ class TestIntegration(unittest.TestCase):
         self.assertRegex(cli.stat(".some.path"),
                          "path:.*\ncreated:  2020.*\nmodified: 2020.*\nlabels:.*\n  some: label\n")
 
-    def test_list(self):
+    def test_ls(self):
         global cli
         cli.write(".some.other.path", "hello\n\nthis is a message\n")
         cli.write(".some.really.other.path", "hello\n\nthis is a message\n")
 
-        self.assertEqual(cli.list("."),
+        self.assertEqual(cli.ls("."),
                          ".some.other.path\n.some.path\n.some.really.other.path\n")
-        self.assertEqual(cli.list(".some"),
+        self.assertEqual(cli.ls(".some"),
                          ".some.other.path\n.some.path\n.some.really.other.path\n")
-        self.assertEqual(cli.list(".some.path"),
+        self.assertEqual(cli.ls(".some.path"),
                          ".some.path\n")
 
     def test_grep(self):
@@ -84,8 +84,8 @@ class Cli:
     def label(self, path, key, value):
         return self.__run(['label', path, key, value])
 
-    def list(self, prefix):
-        return self.__run(['list', prefix])
+    def ls(self, prefix):
+        return self.__run(['ls', prefix])
 
     def grep(self, regex, prefix):
         return self.__run(['grep', regex, prefix])

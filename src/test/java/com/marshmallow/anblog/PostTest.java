@@ -220,6 +220,60 @@ public class PostTest {
     }
 
     @Test
+    public void getPostsByLabels() throws Exception {
+        final Post[] posts = new Post[]{
+                new Post()
+                        .path(".some.path.9")
+                        .content("some content\n\non multiple lines\n\nfor post 1")
+                        .created(1L)
+                        .modified(2L)
+                        .putLabelsItem("type", "memoir")
+                        .putLabelsItem("feeling", "sad"),
+                new Post()
+                        .path(".some.path.1")
+                        .content("some content\n\non multiple lines\n\nfor post 1")
+                        .created(1L)
+                        .modified(2L)
+                        .putLabelsItem("type", "memoir")
+                        .putLabelsItem("feeling", "happy"),
+                new Post()
+                        .path(".some.other.path.2")
+                        .content("some content\n\non multiple lines\n\nfor post 2")
+                        .created(3L)
+                        .modified(4L)
+                        .putLabelsItem("type", "soliloquy")
+                        .putLabelsItem("feeling", "sad"),
+                new Post()
+                        .path(".some.path.3")
+                        .content("some content\n\non multiple lines\n\nfor post 3")
+                        .created(5L)
+                        .modified(6L)
+                        .putLabelsItem("type", "soliloquy")
+                        .putLabelsItem("feeling", "happy"),
+        };
+        for (final Post post : posts) {
+            assertEquals(post, postFromJson(post("/posts", postToJson(post))));
+        }
+
+        assertArrayEquals(
+                new Post[]{posts[1], posts[0]},
+                postsFromJson(get("/posts?labels=type=memoir"))
+        );
+        assertArrayEquals(
+                new Post[]{posts[1], posts[3]},
+                postsFromJson(get("/posts?labels=feeling=happy"))
+        );
+        assertArrayEquals(
+                new Post[]{posts[3]},
+                postsFromJson(get("/posts?labels=type=soliloquy,feeling=happy"))
+        );
+        assertArrayEquals(
+                new Post[]{},
+                postsFromJson(get("/posts?labels=type=soliloquy,doesnt=exist"))
+        );
+    }
+
+    @Test
     public void getPostsByRegex() throws Exception {
         final Post[] posts = new Post[]{
                 new Post()

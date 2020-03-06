@@ -146,6 +146,7 @@ module Anblog
     # @option opts [String] :prefix A path prefix used to filter returned posts
     # @option opts [Array<String>] :fields The comma-separated list of fields to be returned in the response
     # @option opts [String] :content A regex used to filter returned posts by their content
+    # @option opts [Array<String>] :labels A list of key&#x3D;value entries that are AND&#39;d to filter posts
     # @return [Array<Post>]
     def get_all_posts(opts = {})
       data, _status_code, _headers = get_all_posts_with_http_info(opts)
@@ -157,6 +158,7 @@ module Anblog
     # @option opts [String] :prefix A path prefix used to filter returned posts
     # @option opts [Array<String>] :fields The comma-separated list of fields to be returned in the response
     # @option opts [String] :content A regex used to filter returned posts by their content
+    # @option opts [Array<String>] :labels A list of key&#x3D;value entries that are AND&#39;d to filter posts
     # @return [Array<(Array<Post>, Integer, Hash)>] Array<Post> data, response status code and response headers
     def get_all_posts_with_http_info(opts = {})
       if @api_client.config.debugging
@@ -170,6 +172,7 @@ module Anblog
       query_params[:'prefix'] = opts[:'prefix'] if !opts[:'prefix'].nil?
       query_params[:'$fields'] = @api_client.build_collection_param(opts[:'fields'], :multi) if !opts[:'fields'].nil?
       query_params[:'content'] = opts[:'content'] if !opts[:'content'].nil?
+      query_params[:'labels'] = @api_client.build_collection_param(opts[:'labels'], :multi) if !opts[:'labels'].nil?
 
       # header parameters
       header_params = opts[:header_params] || {}

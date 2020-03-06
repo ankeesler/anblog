@@ -106,6 +106,8 @@ sourceSets.main.resources.srcDir buildJavaServer.outputDir.get() + "/src/main/re
 
 bootRun { systemProperties = System.properties }
 
+task testAll(dependsOn: ["test", "testClient", "testIntegration"])
+
 task deploy(type: Exec, dependsOn: [testAll, bootJar]) {
     commandLine 'cf', 'push'
 }
@@ -118,5 +120,3 @@ task testClient(type: Exec) {
 task testIntegration(type: Exec) {
   commandLine 'script/integration_test.sh'
 }
-
-task testAll(dependsOn: ["test", "testClient", "testIntegration"])

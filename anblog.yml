@@ -39,6 +39,13 @@ paths:
         required: false
         schema:
           type: string
+      - name: labels
+        in: query
+        description: A list of key=value entries that are AND'd to filter posts
+        schema:
+          type: array
+          items:
+            type: string
       responses:
         200:
           description: successful operation

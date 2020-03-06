@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.openapitools.api.PostsApiDelegate;
 import org.openapitools.model.Post;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.json.*;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class PostService implements PostsApiDelegate {
@@ -21,23 +24,25 @@ public class PostService implements PostsApiDelegate {
   private PostRepository postRepository;
 
   @Override
-  public ResponseEntity<List<Post>> getAllPosts(final String prefix, final List<String> fields, final String content) {
+  public ResponseEntity<List<Post>> getAllPosts(final String prefix, final List<String> fields, final String content, final List<String> labels) {
     // TODO: we should only be getting the fields that we care about from the repository!
-    final List<Post> posts = new ArrayList<Post>();
-    final Iterable<PostEntity> entities = postRepository.findByPathStartingWith(prefix == null ? "." : prefix);
-
     final Pattern pattern = content == null ? null : Pattern.compile(content, Pattern.DOTALL | Pattern.MULTILINE);
-    for (final PostEntity entity : entities) {
-      if (pattern != null) {
-        final Matcher matcher = pattern.matcher(entity.getContent());
-        if (matcher.matches()) {
-          posts.add(entityToPost(entity, fields));
-        }
-      } else {
-        posts.add(entityToPost(entity, fields));
-      }
-    }
-    posts.sort(Comparator.comparing(Post::getPath));
+
+    final List<LabelFilter> labelFilters = makeLabelFilters(labels);
+
+    final Iterable<PostEntity> entities = postRepository.findByPathStartingWith(prefix == null ? "." : prefix);
+    final List<Post> posts = StreamSupport.stream(entities.spliterator(), true
+    ).filter(
+            e -> pattern == null || pattern.matcher(e.getContent()).matches()
+    ).filter(
+            e -> labelFilters.stream().allMatch(f -> f.containedIn(e.getLabels()))
+    ).map(
+            e -> entityToPost(e, fields)
+    ).sorted(
+            Comparator.comparing(Post::getPath)
+    ).collect(
+            Collectors.toList()
+    );
     return new ResponseEntity<>(posts, HttpStatus.OK);
   }
 
@@ -129,5 +134,22 @@ public class PostService implements PostsApiDelegate {
     entity.setModified(post.getModified());
     entity.setLabels(post.getLabels());
     return entity;
+  }
+
+  private static List<LabelFilter> makeLabelFilters(final List<String> labels) {
+    if (labels == null) {
+      return Collections.emptyList();
+    }
+
+    final List<LabelFilter> labelFilters = new ArrayList<>(labels.size());
+    for (final String filter : labels) {
+      try {
+        labelFilters.add(new LabelFilter(filter));
+      } catch (IllegalArgumentException e) {
+        Logger logger = LoggerFactory.getLogger(PostService.class);
+        logger.info("skipping invalid label query parameter: " + filter);
+      }
+    }
+    return labelFilters;
   }
 }

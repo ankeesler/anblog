@@ -12,7 +12,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.5.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.2.5.RELEASE"
         classpath "org.openapitools:openapi-generator-gradle-plugin:4.0.0"
     }
 }
@@ -119,8 +119,6 @@ task testClient(type: Exec, dependsOn: "buildRubyClient") {
 task testIntegration(type: Exec, dependsOn: "buildRubyClient") {
   commandLine 'script/integration_test.sh'
 }
-
-check.dependsOn testIntegration
 
 checkstyle {
     toolVersion '8.29'

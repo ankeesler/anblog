@@ -1,5 +1,6 @@
 package com.marshmallow.anblog;
 
+import javax.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,10 +10,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class AuthConfig extends WebSecurityConfigurerAdapter {
+  
+  //@Autowired
+  //private MyUserDetailsService myUserDetailsService;
+
+  @Autowired
+  private JWTFilter jwtFilter;
   
   @Override
   public void configure(final HttpSecurity http) throws Exception {
@@ -21,28 +29,20 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests().antMatchers("/download").permitAll().and()
             .authorizeRequests().antMatchers("/actuator/*").permitAll().and()
             .authorizeRequests().anyRequest().authenticated().and()
-            .httpBasic();
+            .httpBasic().disable();
+    http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
   }
   
   @Autowired
   public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
-    String userId = System.getenv("ANBLOG_USERNAME");
-    if (userId == null) {
-      userId = "anblog_default_username";
-    }
-    
-    String userPassword = System.getenv("ANBLOG_PASSWORD");
-    if (userPassword == null) {
-      userPassword = "anblog_default_password";
-    }
-    
     auth
             .inMemoryAuthentication()
-            .withUser(userId)
-            .password(passwordEncoder().encode(userPassword))
+            .withUser("ankeesler")
+            .password(passwordEncoder().encode("ankeesler"))
             .authorities("ADMIN");
   }
   
+  // TODO: do we need this?
   @Bean
   public PasswordEncoder passwordEncoder() {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();
